@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+    </head>
+    <body>
+    <script>
+        const config = {
+        type: Phaser.AUTO,
+        width: 1000,
+        height: 1000,
+        scene: Example,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 200 }
+                }   
+            }
+        };
+        const game = new Phaser.Game(config);
+        </script>
+    </body>
+</html>
