@@ -4,11 +4,12 @@ let game;
 let gameOptions = {
     platformStartSpeed: 350,
     spawnRange: [100, 350],
-    platformSizeRange: [1000, 1000],
+    platformSizeRange: [150, 500],
     playerGravity: 900,
     jumpForce: 400,
     playerStartPosition: 200,
     jumps: 2
+
 }
  
 window.onload = function() {
@@ -23,7 +24,10 @@ window.onload = function() {
  
         // physics settings
         physics: {
-            default: "arcade"
+            default: "arcade",
+            arcade: {
+                debug: true
+            }
         }
     }
     game = new Phaser.Game(gameConfig);
@@ -38,12 +42,18 @@ class playGame extends Phaser.Scene{
         super("PlayGame");
     }
     preload(){
-        this.load.image("platform", "platform.png");
+        this.load.image("platform", "/Assets/platform.png");
         this.load.image("playerSprite", "/Assets/test.png");
     }
     create(){
         
         // group with all active platforms.
+       /* var keyObjects = scene.input.keyboard.addKeys({
+            up: 'W',
+            down: 'S',
+            left: 'A',
+            right: 'D'
+        }); */ 
         this.platformGroup = this.add.group({
  
             // once a platform is removed, it's added to the pool
@@ -70,12 +80,16 @@ class playGame extends Phaser.Scene{
         // adding the player;
         this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height / 2, "playerSprite");
         this.player.setGravityY(gameOptions.playerGravity);
-
+        this.player.scaleX = 0.2;
+        this.player.scaleY = 0.2;
+        this.player.body.setSize(300, 1000);
         // setting collisions between the player and the platform group
         this.physics.add.collider(this.player, this.platformGroup);
         // checking for input
         this.input.on("pointerdown", this.jump, this);
+   //     this.input.on(keyObjects.down, this.drop, this);
     }
+
  
     // the core of the script: platform are added from the pool or created on the fly
     addPlatform(platformWidth, posX){
@@ -88,7 +102,8 @@ class playGame extends Phaser.Scene{
             this.platformPool.remove(platform);
         }
         else{
-            platform = this.physics.add.sprite(posX, game.config.height * 0.8, "platform");
+            let difference = Phaser.Math.Between(-200.0, 200.0);
+            platform = this.physics.add.sprite(posX, (game.config.height * 0.8) + difference, "platform");
             platform.setImmovable(true);
             platform.setVelocityX(gameOptions.platformStartSpeed * -1);
             this.platformGroup.add(platform);
@@ -96,7 +111,12 @@ class playGame extends Phaser.Scene{
         platform.displayWidth = platformWidth;
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
- 
+  /*  drop(){
+        if(!(this.player.body.touching.down))
+        {
+            this.player.setAccelerationY(400);
+        }
+    } */
     // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
     jump(){
         if(this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)){
@@ -108,7 +128,6 @@ class playGame extends Phaser.Scene{
         }
     }
     update(){
- 
         // game over
         if(this.player.y > game.config.height){
             this.scene.start("PlayGame");
