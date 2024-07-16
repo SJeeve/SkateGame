@@ -126,9 +126,9 @@
         if (player.body.touching.down) {
             player.currentJumps = 0;
         }
-
+        console.log(player.);
         //Handle player movements
-        if (cursors.left.isDown || keys.A.isDown)
+        if ((cursors.left.isDown || keys.A.isDown))
         {
             player.setAccelerationX(-400);
         }
