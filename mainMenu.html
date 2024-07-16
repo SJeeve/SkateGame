@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Main Menu</title>
+    <style>
+        body {
+            font-family: 'Pixelify Sans', sans-serif;
+            background-color: #282c34;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .menu, .settings-menu {
+            display: none;
+            text-align: center;
+        }
+        .menu.active, .settings-menu.active {
+            display: block;
+        }
+        .menu h1, .settings-menu h2 {
+            font-size: 6rem;
+            margin-bottom: 20px;
+        }
+        .menu button, .settings-menu button {
+            display: block;
+            width: 200px;
+            padding: 15px;
+            margin: 10px auto;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #61dafb;
+            color: #282c34;
+            transition: background-color 0.3s ease;
+        }
+        .menu button:hover, .settings-menu button:hover {
+            background-color: #21a1f1;
+        }
+        .settings-menu input[type="range"] {
+            width: 100%;
+        }
+        .settings-menu .percentage {
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu active" id="mainMenu">
+        <h1>Katie's Skate Run</h1>
+        <button onclick="startGame()">Start Game</button>
+        <button onclick="showSettings()">Settings</button>
+        <button onclick="quitGame()">Quit</button>
+    </div>
+
+    <div class="settings-menu" id="settingsMenu">
+        <h2>Settings</h2>
+        <div class="setting">
+            <label for="volume">Volume</label>
+            <input type="range" id="volume" name="volume" min="0" max="100" value="50" oninput="updateVolumeDisplay(this.value)">
+            <div class="percentage" id="volumePercentage">50%</div>
+        </div>
+        <button onclick="showMainMenu()">Back</button>
+    </div>
+
+    <script>
+        let originalVolume = 50; // Initial volume value
+
+        function startGame() {
+            alert('Start Game clicked!');
+        }
+
+        function showSettings() {
+            document.getElementById('mainMenu').classList.remove('active');
+            document.getElementById('settingsMenu').classList.add('active');
+        }
+
+        function showMainMenu() {
+            document.getElementById('settingsMenu').classList.remove('active');
+            document.getElementById('mainMenu').classList.add('active');
+        }
+
+        function quitGame() {
+            window.close();
+        }
+
+        // Function to reset volume to the original value
+        function resetVolume() {
+            document.getElementById('volume').value = originalVolume;
+            updateVolumeDisplay(originalVolume);
+        }
+
+        // Function to update the volume percentage display
+        function updateVolumeDisplay(value) {
+            document.getElementById('volumePercentage').innerText = value + '%';
+        }
+
+        // Add double click event listener to volume input
+        document.getElementById('volume').addEventListener('dblclick', resetVolume);
+
+        // Initialize the volume percentage display
+        updateVolumeDisplay(originalVolume);
+    </script>
+</body>
+</html>
