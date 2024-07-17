@@ -5,13 +5,15 @@ let gameOptions = {
     platformStartSpeed: 350,
     spawnRange: [100, 350],
     platformSizeRange: [150, 500],
-    playerGravity: 900,
+    playerGravity: 2500,
     jumpForce: 400,
     playerStartPosition: 200,
     jumps: 2,
     firstPlatform: true
 }
- 
+
+let jumpStrength = 0;
+
 window.onload = function() {
  
     // object containing configuration options
@@ -28,6 +30,10 @@ window.onload = function() {
             arcade: {
                 debug: true
             }
+        },
+        fps: {
+            target: 60,
+            forceSetTimeOut: true
         }
     }
     game = new Phaser.Game(gameConfig);
@@ -46,6 +52,8 @@ class playGame extends Phaser.Scene{
         this.load.image("playerSprite", "/Assets/test.png");
     }
     create(){
+        this.maxHeight = 100;
+        let jumpStrength = 0;
         let cursors = this.input.keyboard.createCursorKeys();
         let down = this.input.keyboard.addKey('S');
         let space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -82,7 +90,7 @@ class playGame extends Phaser.Scene{
         // setting collisions between the player and the platform group
         this.physics.add.collider(this.player, this.platformGroup);
         // checking for input
-        this.input.on("pointerdown", this.jump, this);
+       // this.input.on("SPACE", this.jump, this);
     }
 
     quickDrop(){
@@ -110,29 +118,44 @@ class playGame extends Phaser.Scene{
             console.log(difference);
             platform = this.physics.add.sprite(posX, (game.config.height * 0.8) + difference, "platform");
             platform.setImmovable(true);
-            platform.setVelocityX(gameOptions.platformStartSpeed * -1);
+           // platform.setVelocityX(gameOptions.platformStartSpeed * -1);
             this.platformGroup.add(platform);
         }
         platform.displayWidth = platformWidth;
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
-    // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
-    jump(){
-        if(this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)){
-            if(this.player.body.touching.down){
-                this.playerJumps = 0;
-            }
-            this.player.setVelocityY(gameOptions.jumpForce * -1);
-            this.playerJumps ++;
+
+   /* jump(){
+        if(this.player.body.touching.down){
+           gameOptions.jumpStrength = gameOptions.jumpForce; 
         }
-    }
+    } */
+
     update(){
         // game over
+
+        let space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         if(this.player.y > game.config.height){
             this.scene.start("PlayGame");
         }
         this.player.x = gameOptions.playerStartPosition;
- 
+        if (this.player.body.touching.down) {
+            this.jumpStrength = 0;
+        }
+    
+        // When player presses space and is on the ground, initiate jump
+        if (this.player.body.touching.down && space.isDown) {
+            this.jumpStrength = gameOptions.jumpForce;
+            this.player.setVelocityY(-this.jumpStrength);
+            this.jumpStrength /= 1.5;
+        }
+        // When player is in the air and holding space, reduce jump force gradually
+        else if (!this.player.body.touching.down && space.isDown) {
+            if (this.jumpStrength > 0) {
+                this.player.setVelocityY(this.player.body.velocity.y - this.jumpStrength);
+                this.jumpStrength -= 40; // Adjust this value as needed for the gradual decrease
+            }
+        }
         // recycling platforms
         let minDistance = game.config.width;
         this.platformGroup.getChildren().forEach(function(platform){
@@ -150,6 +173,7 @@ class playGame extends Phaser.Scene{
             this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2);
         }
     }
+    
 };
 function resize(){
     let canvas = document.querySelector("canvas");

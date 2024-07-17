@@ -12,6 +12,8 @@ let gameOptions = {
     firstPlatform: true
 }
  
+let jumpStrength = 0;
+
 window.onload = function() {
  
     // object containing configuration options
@@ -117,7 +119,7 @@ class playGame extends Phaser.Scene{
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
     // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
-    jump(){
+   /* jump(){
         if(this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)){
             if(this.player.body.touching.down){
                 this.playerJumps = 0;
@@ -125,14 +127,31 @@ class playGame extends Phaser.Scene{
             this.player.setVelocityY(gameOptions.jumpForce * -1);
             this.playerJumps ++;
         }
+    }*/
+
+    jump(){
+        if(this.player.body.touching.down){
+           jumpStrength = gameOptions.jumpForce; 
+        }
     }
+
     update(){
         // game over
         if(this.player.y > game.config.height){
             this.scene.start("PlayGame");
         }
         this.player.x = gameOptions.playerStartPosition;
- 
+        if(!(this.player.body.touching.down))
+        {
+            console.log("over there");
+            if(space.SPACE.isDown){
+                console.log("over here");
+                this.player.setVelocityY(player.body.velocityY - jumpStrength);
+                jumpStrength /= 2;
+            }
+        } else {
+            jumpStrengh = 0;
+        }
         // recycling platforms
         let minDistance = game.config.width;
         this.platformGroup.getChildren().forEach(function(platform){
