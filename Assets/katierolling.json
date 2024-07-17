@@ -1,0 +1,135 @@
+{
+  "frames": {
+    "katierolling004": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 404,
+        "h": 974
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 9,
+        "w": 404,
+        "h": 974
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 1000
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "katierolling002": {
+      "frame": {
+        "x": 0,
+        "y": 974,
+        "w": 396,
+        "h": 974
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 11,
+        "w": 396,
+        "h": 974
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 1000
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "katierolling001": {
+      "frame": {
+        "x": 396,
+        "y": 974,
+        "w": 394,
+        "h": 974
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 11,
+        "w": 394,
+        "h": 974
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 1000
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "katierolling005": {
+      "frame": {
+        "x": 404,
+        "y": 0,
+        "w": 408,
+        "h": 972
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 13,
+        "w": 408,
+        "h": 972
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 1000
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "katierolling003": {
+      "frame": {
+        "x": 790,
+        "y": 972,
+        "w": 404,
+        "h": 972
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 7,
+        "w": 404,
+        "h": 972
+      },
+      "sourceSize": {
+        "w": 1000,
+        "h": 1000
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "katierolling.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1194,
+      "h": 1948
+    },
+    "scale": 1
+  }
+}

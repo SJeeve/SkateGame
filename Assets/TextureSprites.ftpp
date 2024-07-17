@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "version": "0.6.7"
+  },
+  "savePath": "",
+  "images": [
+    {
+      "name": "katierolling001.png",
+      "path": "/u/horns501/Downloads/katierolling001.png",
+      "folder": ""
+    },
+    {
+      "name": "katierolling002.png",
+      "path": "/u/horns501/Downloads/katierolling002.png",
+      "folder": ""
+    },
+    {
+      "name": "katierolling003.png",
+      "path": "/u/horns501/Downloads/katierolling003.png",
+      "folder": ""
+    },
+    {
+      "name": "katierolling004.png",
+      "path": "/u/horns501/Downloads/katierolling004.png",
+      "folder": ""
+    },
+    {
+      "name": "katierolling005.png",
+      "path": "/u/horns501/Downloads/katierolling005.png",
+      "folder": ""
+    }
+  ],
+  "folders": [],
+  "packOptions": {
+    "textureName": "texture",
+    "textureFormat": "png",
+    "removeFileExtension": true,
+    "prependFolderName": true,
+    "base64Export": false,
+    "tinify": false,
+    "tinifyKey": "",
+    "scale": 1,
+    "filter": "none",
+    "exporter": "JSON (hash)",
+    "fileName": "pack-result",
+    "savePath": "",
+    "width": 2048,
+    "height": 2048,
+    "fixedSize": false,
+    "powerOfTwo": false,
+    "padding": 0,
+    "extrude": 0,
+    "allowRotation": false,
+    "allowTrim": true,
+    "trimMode": "trim",
+    "alphaThreshold": "0",
+    "detectIdentical": true,
+    "packer": "MaxRectsBin",
+    "packerMethod": "BestShortSideFit"
+  }
+}
