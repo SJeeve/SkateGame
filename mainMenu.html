@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Main Menu</title>
+    <title>Katie's Skate Run</title>
     <style>
         body {
             font-family: 'Pixelify Sans', sans-serif;
@@ -31,19 +31,21 @@
         }
         .menu button, .settings-menu button {
             display: block;
-            width: 200px;
-            padding: 15px;
-            margin: 10px auto;
+            width: 225px; /* 75% of the original 300px */
+            padding: 0;
+            margin: 5px auto; /* Reduce margin for closer spacing */
             font-size: 1.2rem;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            background-color: #61dafb;
+            background-color: transparent;
             color: #282c34;
             transition: background-color 0.3s ease;
         }
-        .menu button:hover, .settings-menu button:hover {
-            background-color: #21a1f1;
+        .menu button img, .settings-menu button img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
         }
         .settings-menu input[type="range"] {
             width: 100%;
@@ -57,58 +59,105 @@
 <body>
     <div class="menu active" id="mainMenu">
         <h1>Katie's Skate Run</h1>
-        <button onclick="startGame()">Start Game</button>
-        <button onclick="showSettings()">Settings</button>
-        <button onclick="quitGame()">Quit</button>
+        <button onclick="startGame()"><img src="Buttons/playButton.png" alt="Start Game"></button>
+        <button onclick="showSettings()"><img src="Buttons/settingsButton.png" alt="Settings"></button>
+        <button onclick="quitGame()"><img src="Buttons/quitButton.png" alt="Quit"></button>
     </div>
 
     <div class="settings-menu" id="settingsMenu">
         <h2>Settings</h2>
         <div class="setting">
             <label for="volume">Volume</label>
-            <input type="range" id="volume" name="volume" min="0" max="100" value="50" oninput="updateVolumeDisplay(this.value)">
+            <input type="range" id="volume" name="volume" min="0" max="100" value="50" oninput="updateVolume(this.value)">
             <div class="percentage" id="volumePercentage">50%</div>
         </div>
-        <button onclick="showMainMenu()">Back</button>
+        <button onclick="showMainMenu()"><img src="Buttons/backButton.png" alt="Back"></button>
     </div>
+
+    <audio id="blipSelectAudio" src="SFX/blipSelect.wav" volume="0.1"></audio>
+    <audio id="mainMenuAudio" src="SFX/powerMove.wav" loop></audio>
+    <audio id="gameAudio" src="SFX/powerMove(no eq).wav" loop></audio>
 
     <script>
         let originalVolume = 50; // Initial volume value
 
+        // Function to start the game
         function startGame() {
-            alert('Start Game clicked!');
+            console.log('Start Game button clicked');
+            document.getElementById('mainMenu').classList.remove('active');
+            document.getElementById('settingsMenu').classList.remove('active');
+            document.getElementById('startGame').classList.add('active');
+            document.getElementById('mainMenuAudio').pause();
+            document.getElementById('gameAudio').play().catch(error => {
+                console.error('Error playing game audio:', error);
+            });
         }
 
+        // Function to show the settings menu
         function showSettings() {
+            console.log('Settings button clicked');
             document.getElementById('mainMenu').classList.remove('active');
             document.getElementById('settingsMenu').classList.add('active');
         }
 
+        // Function to show the main menu
         function showMainMenu() {
+            console.log('Back button clicked');
             document.getElementById('settingsMenu').classList.remove('active');
             document.getElementById('mainMenu').classList.add('active');
+            document.getElementById('mainMenuAudio').play().catch(error => {
+                console.error('Error playing main menu audio:', error);
+            });
+            document.getElementById('gameAudio').pause();
         }
 
+        // Function to quit the game
         function quitGame() {
+            console.log('Quit button clicked');
             window.close();
         }
 
         // Function to reset volume to the original value
         function resetVolume() {
+            console.log('Volume reset to original');
             document.getElementById('volume').value = originalVolume;
-            updateVolumeDisplay(originalVolume);
+            updateVolume(originalVolume);
         }
 
-        // Function to update the volume percentage display
-        function updateVolumeDisplay(value) {
+        // Function to update the volume percentage display and set the volume
+        function updateVolume(value) {
+            console.log('Volume changed to ' + value);
             document.getElementById('volumePercentage').innerText = value + '%';
+            const volume = value / 100;
+            document.getElementById('blipSelectAudio').volume = volume * 0.1; // Make blipSelect quieter
+            document.getElementById('mainMenuAudio').volume = volume;
+            document.getElementById('gameAudio').volume = volume;
         }
 
         // Add double click event listener to volume input
         document.getElementById('volume').addEventListener('dblclick', resetVolume);
 
         // Initialize the volume percentage display
-        updateVolumeDisplay(originalVolume);
+        updateVolume(originalVolume);
+
+        // Function to play the blipSelect audio
+        function playBlipSelect() {
+            console.log('Playing blipSelect audio');
+            const audio = document.getElementById('blipSelectAudio');
+            audio.play().catch(error => {
+                console.error('Error playing blipSelect audio:', error);
+            });
+        }
+
+        // Add mousedown event listener to the entire document to play the blipSelect sound
+        document.addEventListener('mousedown', playBlipSelect);
+
+        // Play main menu audio on load
+        window.onload = function() {
+            document.getElementById('mainMenuAudio').play().catch(error => {
+                console.error('Error playing main menu audio:', error);
+            });
+        };
     </script>
 </body>
 </html>
