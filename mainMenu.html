@@ -1,163 +1,236 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katie's Skate Run</title>
-    <style>
-        body {
-            font-family: 'Pixelify Sans', sans-serif;
-            background-color: #282c34;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .menu, .settings-menu {
-            display: none;
-            text-align: center;
-        }
-        .menu.active, .settings-menu.active {
-            display: block;
-        }
-        .menu h1, .settings-menu h2 {
-            font-size: 6rem;
-            margin-bottom: 20px;
-        }
-        .menu button, .settings-menu button {
-            display: block;
-            width: 225px; /* 75% of the original 300px */
-            padding: 0;
-            margin: 5px auto; /* Reduce margin for closer spacing */
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: transparent;
-            color: #282c34;
-            transition: background-color 0.3s ease;
-        }
-        .menu button img, .settings-menu button img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-        .settings-menu input[type="range"] {
-            width: 100%;
-        }
-        .settings-menu .percentage {
-            margin-top: 10px;
-            font-size: 1.2rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="menu active" id="mainMenu">
-        <h1>Katie's Skate Run</h1>
-        <button onclick="startGame()"><img src="Buttons/playButton.png" alt="Start Game"></button>
-        <button onclick="showSettings()"><img src="Buttons/settingsButton.png" alt="Settings"></button>
-        <button onclick="quitGame()"><img src="Buttons/quitButton.png" alt="Quit"></button>
-    </div>
-
-    <div class="settings-menu" id="settingsMenu">
-        <h2>Settings</h2>
-        <div class="setting">
-            <label for="volume">Volume</label>
-            <input type="range" id="volume" name="volume" min="0" max="100" value="50" oninput="updateVolume(this.value)">
-            <div class="percentage" id="volumePercentage">50%</div>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
+            rel="stylesheet" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Katie's Skate Run</title>
+        <style>
+            body {
+                font-family: "Pixelify Sans", sans-serif;
+                background-color: #282c34;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .menu,
+            .settings-menu,
+            .tutorial-menu {
+                display: none;
+                text-align: center;
+            }
+            .menu.active,
+            .settings-menu.active,
+            .tutorial-menu.active {
+                display: block;
+            }
+            .menu h1,
+            .settings-menu h2,
+            .tutorial-menu h2 {
+                font-size: 6rem;
+                margin-bottom: 20px;
+            }
+            .menu button,
+            .settings-menu button,
+            .tutorial-menu button {
+                display: block;
+                width: 225px; /* 75% of the original 300px */
+                padding: 0;
+                margin: 5px auto; /* Reduce margin for closer spacing */
+                font-size: 1.2rem;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                background-color: transparent;
+                color: #282c34;
+                transition: background-color 0.3s ease;
+            }
+            .menu button img,
+            .settings-menu button img,
+            .tutorial-menu button img {
+                width: 100%;
+                height: auto;
+                border-radius: 5px;
+            }
+            .settings-menu input[type="range"] {
+                width: 100%;
+            }
+            .settings-menu .percentage {
+                margin-top: 10px;
+                font-size: 1.2rem;
+            }
+            .tutorial-content {
+                font-size: 1.5rem;
+                text-align: left;
+                margin: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="menu active" id="mainMenu">
+            <h1>Katie's Skate Run</h1>
+            <button onclick="startGame()"><img src="Buttons/playButton.png" alt="Start Game" /></button>
+            <button onclick="showTutorial()"><img src="Buttons/tutorialButton.png" alt="Tutorial" /></button>
+            <button onclick="showSettings()"><img src="Buttons/settingsButton.png" alt="Settings" /></button>
+            <button onclick="quitGame()"><img src="Buttons/quitButton.png" alt="Quit" /></button>
         </div>
-        <button onclick="showMainMenu()"><img src="Buttons/backButton.png" alt="Back"></button>
-    </div>
 
-    <audio id="blipSelectAudio" src="SFX/blipSelect.wav" volume="0.1"></audio>
-    <audio id="mainMenuAudio" src="SFX/powerMove.wav" loop></audio>
-    <audio id="gameAudio" src="SFX/powerMove(no eq).wav" loop></audio>
+        <div class="settings-menu" id="settingsMenu">
+            <h2>Settings</h2>
+            <div class="setting">
+                <label for="volume">Volume</label>
+                <input
+                    type="range"
+                    id="volume"
+                    name="volume"
+                    min="0"
+                    max="100"
+                    value="50"
+                    oninput="updateVolume(this.value)" />
+                <div class="percentage" id="volumePercentage">50%</div>
+            </div>
+            <button onclick="showMainMenu()"><img src="Buttons/backButton.png" alt="Back" /></button>
+        </div>
 
-    <script>
-        let originalVolume = 50; // Initial volume value
+        <div class="tutorial-menu" id="tutorialMenu">
+            <h2>Tutorial</h2>
+            <div class="tutorial-content">
+                <h3>Controls</h3>
+                <ul>
+                    <li>Move Left: <strong>Left Arrow</strong> or <strong>A</strong></li>
+                    <li>Move Right: <strong>Right Arrow</strong> or <strong>D</strong></li>
+                    <li>Jump: <strong>Spacebar</strong></li>
+                    <li>Pause: <strong>Escape</strong></li>
+                </ul>
+                <h3>Objective</h3>
+                <p>
+                    Your goal is to navigate Katie through the skate park, avoid obstacles, and collect as many points
+                    as possible. Reach the end of the level to win!
+                </p>
+            </div>
+            <button onclick="showMainMenu()"><img src="Buttons/backButton.png" alt="Back" /></button>
+        </div>
 
-        // Function to start the game
-        function startGame() {
-            console.log('Start Game button clicked');
-            document.getElementById('mainMenu').classList.remove('active');
-            document.getElementById('settingsMenu').classList.remove('active');
-            document.getElementById('startGame').classList.add('active');
-            document.getElementById('mainMenuAudio').pause();
-            document.getElementById('gameAudio').play().catch(error => {
-                console.error('Error playing game audio:', error);
-            });
-        }
+        <audio id="blipSelectAudio" src="SFX/blipSelect.wav" volume="0.1"></audio>
+        <audio id="mainMenuAudio" src="SFX/Chemistry.mp3" loop></audio>
+        <audio id="gameAudio" src="SFX/UlteriorMotives.mp3" loop></audio>
 
-        // Function to show the settings menu
-        function showSettings() {
-            console.log('Settings button clicked');
-            document.getElementById('mainMenu').classList.remove('active');
-            document.getElementById('settingsMenu').classList.add('active');
-        }
+        <script>
+            let originalVolume = 50; // Initial volume value
 
-        // Function to show the main menu
-        function showMainMenu() {
-            console.log('Back button clicked');
-            document.getElementById('settingsMenu').classList.remove('active');
-            document.getElementById('mainMenu').classList.add('active');
-            document.getElementById('mainMenuAudio').play().catch(error => {
-                console.error('Error playing main menu audio:', error);
-            });
-            document.getElementById('gameAudio').pause();
-        }
+            // Function to start the game
+            function startGame() {
+                console.log("Start Game button clicked");
+                document.getElementById("mainMenu").classList.remove("active");
+                document.getElementById("settingsMenu").classList.remove("active");
 
-        // Function to quit the game
-        function quitGame() {
-            console.log('Quit button clicked');
-            window.close();
-        }
+                // Load and run game.js
+                const script = document.createElement("script");
+                script.src = "game.js";
+                script.onload = function () {
+                    console.log("Game script loaded and executed.");
+                };
+                script.onerror = function () {
+                    console.error("Failed to load the game script.");
+                };
+                document.body.appendChild(script);
 
-        // Function to reset volume to the original value
-        function resetVolume() {
-            console.log('Volume reset to original');
-            document.getElementById('volume').value = originalVolume;
+                document.getElementById("mainMenuAudio").pause();
+                document
+                    .getElementById("gameAudio")
+                    .play()
+                    .catch((error) => {
+                        console.error("Error playing game audio:", error);
+                    });
+            }
+
+            // Function to show the settings menu
+            function showSettings() {
+                console.log("Settings button clicked");
+                document.getElementById("mainMenu").classList.remove("active");
+                document.getElementById("settingsMenu").classList.add("active");
+            }
+
+            // Function to show the tutorial menu
+            function showTutorial() {
+                console.log("Tutorial button clicked");
+                document.getElementById("mainMenu").classList.remove("active");
+                document.getElementById("tutorialMenu").classList.add("active");
+            }
+
+            // Function to show the main menu
+            function showMainMenu() {
+                console.log("Back button clicked");
+                document.getElementById("settingsMenu").classList.remove("active");
+                document.getElementById("tutorialMenu").classList.remove("active");
+                document.getElementById("mainMenu").classList.add("active");
+                document
+                    .getElementById("mainMenuAudio")
+                    .play()
+                    .catch((error) => {
+                        console.error("Error playing main menu audio:", error);
+                    });
+                document.getElementById("gameAudio").pause();
+            }
+
+            // Function to quit the game
+            function quitGame() {
+                console.log("Quit button clicked");
+                window.close();
+            }
+
+            // Function to reset volume to the original value
+            function resetVolume() {
+                console.log("Volume reset to original");
+                document.getElementById("volume").value = originalVolume;
+                updateVolume(originalVolume);
+            }
+
+            // Function to update the volume percentage display and set the volume
+            function updateVolume(value) {
+                console.log("Volume changed to " + value);
+                document.getElementById("volumePercentage").innerText = value + "%";
+                const volume = value / 100;
+                document.getElementById("blipSelectAudio").volume = volume * 0.1; // Make blipSelect quieter
+                document.getElementById("mainMenuAudio").volume = volume;
+                document.getElementById("gameAudio").volume = volume;
+            }
+
+            // Add double click event listener to volume input
+            document.getElementById("volume").addEventListener("dblclick", resetVolume);
+
+            // Initialize the volume percentage display
             updateVolume(originalVolume);
-        }
 
-        // Function to update the volume percentage display and set the volume
-        function updateVolume(value) {
-            console.log('Volume changed to ' + value);
-            document.getElementById('volumePercentage').innerText = value + '%';
-            const volume = value / 100;
-            document.getElementById('blipSelectAudio').volume = volume * 0.1; // Make blipSelect quieter
-            document.getElementById('mainMenuAudio').volume = volume;
-            document.getElementById('gameAudio').volume = volume;
-        }
+            // Function to play the blipSelect audio
+            function playBlipSelect() {
+                console.log("Playing blipSelect audio");
+                const audio = document.getElementById("blipSelectAudio");
+                audio.play().catch((error) => {
+                    console.error("Error playing blipSelect audio:", error);
+                });
+            }
 
-        // Add double click event listener to volume input
-        document.getElementById('volume').addEventListener('dblclick', resetVolume);
+            // Add mousedown event listener to the entire document to play the blipSelect sound
+            document.addEventListener("mousedown", playBlipSelect);
 
-        // Initialize the volume percentage display
-        updateVolume(originalVolume);
-
-        // Function to play the blipSelect audio
-        function playBlipSelect() {
-            console.log('Playing blipSelect audio');
-            const audio = document.getElementById('blipSelectAudio');
-            audio.play().catch(error => {
-                console.error('Error playing blipSelect audio:', error);
-            });
-        }
-
-        // Add mousedown event listener to the entire document to play the blipSelect sound
-        document.addEventListener('mousedown', playBlipSelect);
-
-        // Play main menu audio on load
-        window.onload = function() {
-            document.getElementById('mainMenuAudio').play().catch(error => {
-                console.error('Error playing main menu audio:', error);
-            });
-        };
-    </script>
-</body>
+            // Play main menu audio on load
+            window.onload = function () {
+                document
+                    .getElementById("mainMenuAudio")
+                    .play()
+                    .catch((error) => {
+                        console.error("Error playing main menu audio:", error);
+                    });
+            };
+        </script>
+    </body>
 </html>
