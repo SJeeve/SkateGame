@@ -5,18 +5,13 @@ let gameOptions = {
     platformStartSpeed: 350,
     spawnRange: [100, 350],
     platformSizeRange: [150, 500],
-    playerGravity: 100,
+    playerGravity: 900,
     jumpForce: 400,
     playerStartPosition: 200,
     jumps: 2,
-    firstPlatform: true,
-    gravity: 10,
-    jump_Strength: 100,
+    firstPlatform: true
 }
 
-var jumpStrength = 0;
-const gravity = 10;
-const jump_Strength = 400;
 
 
 window.onload = function() {
@@ -47,20 +42,21 @@ window.onload = function() {
     resize();
     window.addEventListener("resize", resize, false);
     var jumpStrength = 0;
+    const gravity = 10;
+    const jump_Strength = 100;
+    const space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 }
  
 // playGame scene
 class playGame extends Phaser.Scene{
     constructor(){
         super("PlayGame");
-        this.space = null;
     }
     preload(){
         this.load.image("platform", "/Assets/platform.png");
         this.load.image("playerSprite", "/Assets/test.png");
     }
     create(){
-        this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.maxHeight = 100;
         let jumpStrength = 0;
         let cursors = this.input.keyboard.createCursorKeys();
@@ -147,18 +143,16 @@ class playGame extends Phaser.Scene{
             this.scene.start("PlayGame");
         }
         this.player.x = gameOptions.playerStartPosition;
-        if(this.player.body.touching.down){
-            jumpStrength = jump_Strength;
-            //this.player.setVelocityY(-jumpStrength);
-        } else if(!(this.player.body.touching.down))
+        if(!(this.player.body.touching.down))
         {
-            if(this.space.isDown)
+            if(space.isDown)
             {
                 this.player.setVelocityY(-jumpStrength)
-                jumpStrength /= 1.15;
+                jumpStrength /= 2;
             }
             this.player.setVelocityY(this.player.body.velocity.y + gravity);
         } else{
+            this.player.setVelocityY(0);
             jumpStrength = 0;
         }
         // recycling platforms
