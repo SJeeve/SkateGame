@@ -120,6 +120,7 @@ var getCoin;
 class playGame extends Phaser.Scene {
     score = 0;
     gui;
+    
     constructor() {
         super("PlayGame");
     }
@@ -137,7 +138,7 @@ class playGame extends Phaser.Scene {
         this.platformGroup = this.add.group({
 
             // once a platform is removed, it's added to the pool
-            removeCallback: function (platform) {        enemyPercent: 25
+            removeCallback: function (platform) {       
                 platform.scene.platformPool.add(platform)
             }
         });
@@ -391,6 +392,7 @@ class playGame extends Phaser.Scene {
             sfx.stop();
             this.gui.setText(0);
             this.score = 0;
+            sfx.stop();
             this.scene.start("PlayGame");
         }
     
@@ -427,7 +429,6 @@ class playGame extends Phaser.Scene {
             }
         }, this);
 
-}
         // adding new platforms
         if (minDistance > this.nextPlatformDistance) {
             let nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
@@ -440,4 +441,4 @@ class playGame extends Phaser.Scene {
         }
     }
 
-    }}
+    }}}
