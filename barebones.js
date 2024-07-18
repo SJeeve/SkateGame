@@ -87,14 +87,16 @@ class preloadGame extends Phaser.Scene{
         this.scene.start("PlayGame");
     }
 }
-
+var health;
 // playGame scene
 class playGame extends Phaser.Scene{
+    
     constructor(){
         super("PlayGame");
     }
+    
     create(){
-
+        health = 3;
         // group with all active platforms.
         this.platformGroup = this.add.group({
 
@@ -103,6 +105,8 @@ class playGame extends Phaser.Scene{
                 platform.scene.platformPool.add(platform)
             }
         });
+
+        health = 3;
 
         // platform pool
         this.platformPool = this.add.group({
@@ -196,12 +200,15 @@ class playGame extends Phaser.Scene{
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function(player, enemy){
-
-            this.dying = true;
-            this.player.anims.stop();
-            this.player.setFrame(2);
-            this.player.body.setVelocityY(-200);
-            this.physics.world.removeCollider(this.platformCollider);
+            console.log(health);
+            health--;
+            if(health <= 0)
+            {
+                this.player.anims.stop();
+                this.player.setFrame(2);
+                this.player.body.setVelocityY(-200);
+                this.physics.world.removeCollider(this.platformCollider);
+            }
 
         }, null, this);
 
