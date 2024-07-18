@@ -1,5 +1,10 @@
 let game;
 
+ function preload ()
+{
+    this.load.audio('powerMove', [ 'Documents/Phoenix Code/Katie/ kateGame/SFX/powerMove.wav' ]);
+}
+
 // global game options
 let gameOptions = {
 
@@ -38,7 +43,8 @@ let gameOptions = {
 
     // % of probability a enemy appears on the platform
     enemyPercent: 25
-}
+
+};
 
 window.onload = function() {
 
@@ -57,12 +63,12 @@ window.onload = function() {
                 debug: true
             }
         }
-    }
+    };
     game = new Phaser.Game(gameConfig);
     window.focus();
     resize();
     window.addEventListener("resize", resize, false);
-}
+};
 
 // preloadGame scene
 class preloadGame extends Phaser.Scene{
@@ -70,12 +76,14 @@ class preloadGame extends Phaser.Scene{
         super("PreloadGame");
     }
     preload(){
+
         this.load.image("platform", "/Assets/PixlSkateFloor.png");
 
         this.load.spritesheet("player", "/Assets/gray.png", {
             frameWidth: 24,
             frameHeight: 48
         });
+
 
     }
     create(){
@@ -102,7 +110,7 @@ class playGame extends Phaser.Scene{
 
             // once a platform is removed, it's added to the pool
             removeCallback: function(platform){
-                platform.scene.platformPool.add(platform)
+                platform.scene.platformPool.add(platform);
             }
         });
 
@@ -113,7 +121,7 @@ class playGame extends Phaser.Scene{
 
             // once a platform is removed from the pool, it's added to the active platforms group
             removeCallback: function(platform){
-                platform.scene.platformGroup.add(platform)
+                platform.scene.platformGroup.add(platform);
             }
         });
 
@@ -122,7 +130,7 @@ class playGame extends Phaser.Scene{
 
             // once a coin is removed, it's added to the pool
             removeCallback: function(coin){
-                coin.scene.coinPool.add(coin)
+                coin.scene.coinPool.add(coin);
             }
         });
 
@@ -131,7 +139,7 @@ class playGame extends Phaser.Scene{
 
             // once a coin is removed from the pool, it's added to the active coins group
             removeCallback: function(coin){
-                coin.scene.coinGroup.add(coin)
+                coin.scene.coinGroup.add(coin);
             }
         });
 
@@ -140,7 +148,7 @@ class playGame extends Phaser.Scene{
 
             // once a enemycamp is removed, it's added to the pool
             removeCallback: function(enemy){
-                enemy.scene.enemyPool.add(enemy)
+                enemy.scene.enemyPool.add(enemy);
             }
         });
 
@@ -149,7 +157,7 @@ class playGame extends Phaser.Scene{
 
             // once a enemy is removed from the pool, it's added to the active enemy group
             removeCallback: function(enemy){
-                enemy.scene.enemyGroup.add(enemy)
+                enemy.scene.enemyGroup.add(enemy);
             }
         });
 
@@ -213,9 +221,11 @@ class playGame extends Phaser.Scene{
         }, null, this);
 
         // checking for input
-        this.input.on("pointerdown", this.jump, this);
+
+        this.input.on("w", this.jump, this);
         let down = this.input.keyboard.addKey('S');
-        down.on('down', this.quickDrop, this)
+        down.on('down', this.quickDrop, this);
+
     }
 
     quickDrop(){
@@ -288,7 +298,9 @@ class playGame extends Phaser.Scene{
                     let enemy = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 46, "enemy");
                     enemy.setImmovable(true);
                     enemy.setVelocityX(platform.body.velocity.x);
-                    enemy.setSize(8, 2, true)
+
+                    enemy.setSize(8, 2, true);
+                    //enemy.anims.play("burn");
                     enemy.setDepth(2);
                     this.enemyGroup.add(enemy);
                 }
@@ -363,7 +375,7 @@ class playGame extends Phaser.Scene{
             this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2, nextPlatformHeight);
         }
     }
-};
+}
 function resize(){
     let canvas = document.querySelector("canvas");
     let windowWidth = window.innerWidth;
