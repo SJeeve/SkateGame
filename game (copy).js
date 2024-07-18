@@ -11,7 +11,9 @@ let gameOptions = {
     jumps: 2,
     firstPlatform: true
 }
- 
+
+
+
 window.onload = function() {
  
     // object containing configuration options
@@ -28,12 +30,21 @@ window.onload = function() {
             arcade: {
                 debug: true
             }
+        },
+        fps: {
+            target: 60,
+            forceSetTimeOut: true
         }
+
     }
     game = new Phaser.Game(gameConfig);
     window.focus();
     resize();
     window.addEventListener("resize", resize, false);
+    var jumpStrength = 0;
+    const gravity = 10;
+    const jump_Strength = 100;
+    const space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 }
  
 // playGame scene
@@ -46,9 +57,10 @@ class playGame extends Phaser.Scene{
         this.load.image("playerSprite", "/Assets/test.png");
     }
     create(){
+        this.maxHeight = 100;
+        let jumpStrength = 0;
         let cursors = this.input.keyboard.createCursorKeys();
         let down = this.input.keyboard.addKey('S');
-        let space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         down.on('down', this.quickDrop, this);
         this.platformGroup = this.add.group({
  
@@ -82,7 +94,7 @@ class playGame extends Phaser.Scene{
         // setting collisions between the player and the platform group
         this.physics.add.collider(this.player, this.platformGroup);
         // checking for input
-        this.input.on("pointerdown", this.jump, this);
+       // this.input.on("SPACE", this.jump, this);
     }
 
     quickDrop(){
@@ -116,23 +128,33 @@ class playGame extends Phaser.Scene{
         platform.displayWidth = platformWidth;
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
-    // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
-    jump(){
-        if(this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps)){
-            if(this.player.body.touching.down){
-                this.playerJumps = 0;
-            }
-            this.player.setVelocityY(gameOptions.jumpForce * -1);
-            this.playerJumps ++;
+
+   /* jump(){
+        if(this.player.body.touching.down){
+           gameOptions.jumpStrength = gameOptions.jumpForce; 
         }
-    }
+    } */
+
     update(){
         // game over
+
+
         if(this.player.y > game.config.height){
             this.scene.start("PlayGame");
         }
         this.player.x = gameOptions.playerStartPosition;
- 
+        if(!(this.player.body.touching.down))
+        {
+            if(space.isDown)
+            {
+                this.player.setVelocityY(-jumpStrength)
+                jumpStrength /= 2;
+            }
+            this.player.setVelocityY(this.player.body.velocity.y + gravity);
+        } else{
+            this.player.setVelocityY(0);
+            jumpStrength = 0;
+        }
         // recycling platforms
         let minDistance = game.config.width;
         this.platformGroup.getChildren().forEach(function(platform){
@@ -150,6 +172,7 @@ class playGame extends Phaser.Scene{
             this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2);
         }
     }
+    
 };
 function resize(){
     let canvas = document.querySelector("canvas");
