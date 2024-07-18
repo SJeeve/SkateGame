@@ -123,7 +123,7 @@ class playGame extends Phaser.Scene {
         this.platformGroup = this.add.group({
 
             // once a platform is removed, it's added to the pool
-            removeCallback: function (platform) {
+            removeCallback: function (platform) {        enemyPercent: 25
                 platform.scene.platformPool.add(platform)
             }
         });
