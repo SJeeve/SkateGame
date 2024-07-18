@@ -174,7 +174,8 @@ class playGame extends Phaser.Scene{
         this.player.setDepth(2);
         this.anims.create({key: 'katie_skating', frames: this.anims.generateFrameNames('player', {prefix: 'katierolling', start: 1, end: 5, zeroPad: 3}), repeat: -1, frameRate: 7});
         this.player.play('katie_skating')
-        this.player.setScale(.1)
+        this.player.setScale(.15)
+        this.player.body.width = 100
 
 
         // the player is not dying
