@@ -77,6 +77,7 @@ class preloadGame extends Phaser.Scene{
         this.load.audio('powerMove', 'SFX/powerMove.wav');
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
+        this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
         this.load.spritesheet("player", "/Assets/gray.png", {
             frameWidth: 24,
             frameHeight: 48
@@ -98,6 +99,7 @@ var sfx;
 var jumpSound;
 var deathSound;
 var gameOver;
+var getCoin;
 // playGame scene
 class playGame extends Phaser.Scene{
     
@@ -110,6 +112,7 @@ class playGame extends Phaser.Scene{
         sfx = sfx || this.sound.add('powerMove');
         jumpSound = this.sound.add('jump');
         deathSound = this.sound.add('gameOver');
+        getCoin = this.sound.add('pickupCoin');
         sfx.play();
         health = 3;
         // group with all active platforms.
@@ -206,6 +209,7 @@ class playGame extends Phaser.Scene{
                 ease: "Cubic.easeOut",
                 callbackScope: this,
                 onComplete: function(){
+                    getCoin.play();
                     this.coinGroup.killAndHide(coin);
                     this.coinGroup.remove(coin);
                 }
