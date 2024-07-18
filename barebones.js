@@ -75,6 +75,8 @@ class preloadGame extends Phaser.Scene{
 
         this.load.image("platform", "/Assets/PixlSkateFloor.png");
         this.load.audio('powerMove', 'SFX/powerMove.wav');
+        this.load.audio('jump', 'SFX/jump.wav');
+        this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.spritesheet("player", "/Assets/gray.png", {
             frameWidth: 24,
             frameHeight: 48
@@ -93,6 +95,9 @@ class preloadGame extends Phaser.Scene{
 }
 var health;
 var sfx;
+var jumpSound;
+var deathSound;
+var gameOver;
 // playGame scene
 class playGame extends Phaser.Scene{
     
@@ -101,7 +106,10 @@ class playGame extends Phaser.Scene{
     }
     
     create(){
-        sfx = this.sound.add('powerMove');
+        gameOver = false;
+        sfx = sfx || this.sound.add('powerMove');
+        jumpSound = this.sound.add('jump');
+        deathSound = this.sound.add('gameOver');
         sfx.play();
         health = 3;
         // group with all active platforms.
@@ -320,6 +328,7 @@ class playGame extends Phaser.Scene{
             }
             this.player.setVelocityY(gameOptions.jumpForce * -1);
             this.playerJumps ++;
+            jumpSound.play();
 
             // stops animation
             this.player.anims.stop();
@@ -329,8 +338,11 @@ class playGame extends Phaser.Scene{
     update(){
 
         // game over
-        if(this.player.y > game.config.height){
-            this.scene.start("PlayGame");
+        if(!gameOver&&this.player.y > game.config.height){
+            gameOver = true;
+            sfx.stop();
+            deathSound.play();
+            this.time.delayedCall(2500, () => this.scene.start("PlayGame"), null, this);
         }
 
         this.player.x = gameOptions.playerStartPosition;
