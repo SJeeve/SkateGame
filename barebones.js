@@ -372,7 +372,6 @@ class playGame extends Phaser.Scene {
             this.score = 0;
             sfx.stop();
             this.scene.start("PlayGame");
-
         }
     
         this.player.x = gameOptions.playerStartPosition;
