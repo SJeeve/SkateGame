@@ -58,12 +58,12 @@ window.onload = function() {
                 debug: true
             }
         }
-    }
+    };
     game = new Phaser.Game(gameConfig);
     window.focus();
     resize();
     window.addEventListener("resize", resize, false);
-}
+};
 
 function resize() {
     let canvas = document.querySelector("canvas");
@@ -90,6 +90,13 @@ class preloadGame extends Phaser.Scene {
     preload() {
         this.load.image("platform", "/Assets/PixlSkateFloor.png");
         this.load.audio('powerMove', 'SFX/powerMove.wav');
+        this.load.audio('jump', 'SFX/jump.wav');
+        this.load.audio('gameOver', 'SFX/gameOver.wav');
+        this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
+        this.load.spritesheet("player", "/Assets/gray.png", {
+            frameWidth: 24,
+            frameHeight: 48
+        });
         this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
 
     }
@@ -100,6 +107,10 @@ class preloadGame extends Phaser.Scene {
 var health;
 var lastHeight;
 var sfx;
+var jumpSound;
+var deathSound;
+var gameOver;
+var getCoin;
 // playGame scene
 class playGame extends Phaser.Scene {
     score = 0;
@@ -108,13 +119,16 @@ class playGame extends Phaser.Scene {
     constructor() {
         super("PlayGame");
     }
-
-    create() {
-        sfx = this.sound.add('powerMove');
+    create(){
+        gameOver = false;
+        sfx = sfx || this.sound.add('powerMove');
+        jumpSound = this.sound.add('jump');
+        deathSound = this.sound.add('gameOver');
+        getCoin = this.sound.add('pickupCoin');
         sfx.play();
+        health = 3;
+    create();{
         this.gui = this.add.text(16, 16, '', {fontSize: '32px', fill: '#000'});
-
-
         // group with all active platforms.
         this.platformGroup = this.add.group({
 
@@ -129,7 +143,7 @@ class playGame extends Phaser.Scene {
 
             // once a platform is removed from the pool, it's added to the active platforms group
             removeCallback: function (platform) {
-                platform.scene.platformGroup.add(platform)
+                platform.scene.platformGroup.add(platform);
             }
         });
 
@@ -138,7 +152,7 @@ class playGame extends Phaser.Scene {
 
             // once a coin is removed, it's added to the pool
             removeCallback: function (coin) {
-                coin.scene.coinPool.add(coin)
+                coin.scene.coinPool.add(coin);
             }
         });
 
@@ -147,7 +161,7 @@ class playGame extends Phaser.Scene {
 
             // once a coin is removed from the pool, it's added to the active coins group
             removeCallback: function (coin) {
-                coin.scene.coinGroup.add(coin)
+                coin.scene.coinGroup.add(coin);
             }
         });
 
@@ -165,7 +179,7 @@ class playGame extends Phaser.Scene {
 
             // once a enemy is removed from the pool, it's added to the active enemy group
             removeCallback: function (enemy) {
-                enemy.scene.enemyGroup.add(enemy)
+                enemy.scene.enemyGroup.add(enemy);
             }
         });
 
@@ -221,7 +235,8 @@ class playGame extends Phaser.Scene {
                 duration: 800,
                 ease: "Cubic.easeOut",
                 callbackScope: this,
-                onComplete: function () {
+                onComplete: function(){
+                    getCoin.play();
                     this.coinGroup.killAndHide(coin);
                     this.coinGroup.remove(coin);
                 }
@@ -248,28 +263,28 @@ class playGame extends Phaser.Scene {
         let up = this.input.keyboard.addKey('W');
         up.on("down", this.jump, this);
         let down = this.input.keyboard.addKey('S');
-        down.on('down', this.quickDrop, this)
+        down.on('down', this.quickDrop, this);
 
     }
 
     // Function to update the score display on the webpage
-    updateScoreDisplay() {
+    updateScoreDisplay() ;{
         this.gui.setText(this.score);
     }
     // Function to increment the score
-    addScore() {
+    addScore() ;{
         this.score++;
         this.updateScoreDisplay();
     }
 
-    quickDrop(){
+    quickDrop();{
         if (!(this.player.body.touching.down)) {
             this.player.setVelocityY(1000);
         }
     }
     
     // the core of the script: platform are added from the pool or created on the fly
-    addPlatform(platformWidth, posX, posY){
+    addPlatform(platformWidth, posX, posY);{
         this.addedPlatforms++;
         let platform;
         if (this.platformPool.getLength()) {
@@ -332,7 +347,7 @@ class playGame extends Phaser.Scene {
                     let enemy = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 46, "enemy");
                     enemy.setImmovable(true);
                     enemy.setVelocityX(platform.body.velocity.x);
-                    enemy.setSize(8, 2, true)
+                    enemy.setSize(8, 2, true);
                     enemy.setDepth(2);
                     this.enemyGroup.add(enemy);
                 }
@@ -342,23 +357,30 @@ class playGame extends Phaser.Scene {
     
     // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
     // and obviously if the player is not dying
-    jump(){
+    jump();{
         if ((!this.dying) && (this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps))) {
             if (this.player.body.touching.down) {
                 this.playerJumps = 0;
             }
             this.player.setVelocityY(gameOptions.jumpForce * -1);
+            this.playerJumps ++;
+            jumpSound.play();
             this.playerJumps++;
-    
             // stops animation
             this.player.anims.stop();
         }
     }
     
-    update(){
+    update();{
         
         // game over
-        if (this.player.y > game.config.height) {
+        if(!gameOver&&this.player.y > game.config.height){
+            gameOver = true;
+            sfx.stop();
+            deathSound.play();
+            this.time.delayedCall(2600, () => this.scene.start("PlayGame"), null, this);
+            if (this.player.y > game.config.height){
+            sfx.stop();
             this.gui.setText(0);
             this.score = 0;
             sfx.stop();
@@ -410,4 +432,4 @@ class playGame extends Phaser.Scene {
         }
     }
 
-}
+    }}}
