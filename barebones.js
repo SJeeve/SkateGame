@@ -1,9 +1,5 @@
 let game;
 
- function preload ()
-{
-    this.load.audio('powerMove', [ 'Documents/Phoenix Code/Katie/ kateGame/SFX/powerMove.wav' ]);
-}
 
 // global game options
 let gameOptions = {
@@ -78,7 +74,7 @@ class preloadGame extends Phaser.Scene{
     preload(){
 
         this.load.image("platform", "/Assets/PixlSkateFloor.png");
-
+        this.load.audio('powerMove', 'SFX/powerMove.wav');
         this.load.spritesheet("player", "/Assets/gray.png", {
             frameWidth: 24,
             frameHeight: 48
@@ -95,14 +91,19 @@ class preloadGame extends Phaser.Scene{
         this.scene.start("PlayGame");
     }
 }
-
+var health;
+var sfx;
 // playGame scene
 class playGame extends Phaser.Scene{
+    
     constructor(){
         super("PlayGame");
     }
+    
     create(){
-
+        sfx = this.sound.add('powerMove');
+        sfx.play();
+        health = 3;
         // group with all active platforms.
         this.platformGroup = this.add.group({
 
@@ -111,6 +112,8 @@ class playGame extends Phaser.Scene{
                 platform.scene.platformPool.add(platform);
             }
         });
+
+        health = 3;
 
         // platform pool
         this.platformPool = this.add.group({
@@ -204,18 +207,24 @@ class playGame extends Phaser.Scene{
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function(player, enemy){
+            console.log(health);
+            health--;
+            if(health <= 0)
+            {
+                sfx.stop();
+                this.player.anims.stop();
+                this.player.setFrame(2);
+                this.player.body.setVelocityY(-200);
+                this.physics.world.removeCollider(this.platformCollider);
 
-            this.dying = true;
-            this.player.anims.stop();
-            this.player.setFrame(2);
-            this.player.body.setVelocityY(-200);
-            this.physics.world.removeCollider(this.platformCollider);
+            }
 
         }, null, this);
 
         // checking for input
 
-        this.input.on("w", this.jump, this);
+        let up = this.input.keyboard.addKey('W');
+        up.on("down", this.jump, this);
         let down = this.input.keyboard.addKey('S');
         down.on('down', this.quickDrop, this);
 
