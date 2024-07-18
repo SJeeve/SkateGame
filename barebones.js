@@ -45,8 +45,8 @@ window.onload = function() {
     // object containing configuration options
     let gameConfig = {
         type: Phaser.AUTO,
-        width: 1334,
-        height: 750,
+        width: 800,
+        height: 600,
         scene: [preloadGame, playGame],
         backgroundColor: 0x0c88c7,
 
@@ -68,7 +68,7 @@ class preloadGame extends Phaser.Scene{
         super("PreloadGame");
     }
     preload(){
-        this.load.image("platform", "/Assets/gray.png");
+        this.load.image("platform", "/Assets/PixlSkateFloor.png");
 
         this.load.spritesheet("player", "/Assets/gray.png", {
             frameWidth: 24,
@@ -313,7 +313,6 @@ class playGame extends Phaser.Scene{
                     enemy.setImmovable(true);
                     enemy.setVelocityX(platform.body.velocity.x);
                     enemy.setSize(8, 2, true)
-                    enemy.anims.play("burn");
                     enemy.setDepth(2);
                     this.enemyGroup.add(enemy);
                 }
