@@ -5,7 +5,8 @@ let gameOptions = {
     platformStartSpeed: 350,
     spawnRange: [100, 350],
     platformSizeRange: [150, 500],
-    playerGravity: 100,
+    playerGravity: 900,
+    player_Gravity: 900,
     jumpForce: 400,
     playerStartPosition: 200,
     jumps: 2,
@@ -133,33 +134,29 @@ class playGame extends Phaser.Scene{
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
 
-   /* jump(){
-        if(this.player.body.touching.down){
-           gameOptions.jumpStrength = gameOptions.jumpForce; 
-        }
-    } */
-
     update(){
         // game over
-
-
         if(this.player.y > game.config.height){
             this.scene.start("PlayGame");
         }
         this.player.x = gameOptions.playerStartPosition;
-        if(this.player.body.touching.down){
-            jumpStrength = jump_Strength;
-            //this.player.setVelocityY(-jumpStrength);
-        } else if(!(this.player.body.touching.down))
-        {
-            if(this.space.isDown)
+        if(this.player.body.touching.down && this.space.isDown){
+            if(gameOptions.playerGravity === gameOptions.player_Gravity)
             {
-                this.player.setVelocityY(-jumpStrength)
-                jumpStrength /= 1.15;
+                gameOptions.playerGravity = gameOptions.player_Gravity / 2;
+                this.player.setVelocityY(-100);
             }
-            this.player.setVelocityY(this.player.body.velocity.y + gravity);
-        } else{
-            jumpStrength = 0;
+        } else if(!(this.player.body.touching.down) && !(this.space.isDown))
+        {
+            this.player.setVelocityY(-100);
+            gameOptions.playerGravity = gameOptions.player_Gravity;
+        } else if(!(this.player.body.touching.down) && this.space.isDown)
+        {
+            if(gameOptions.playerGravity < 900)
+            {
+                this.player.setVelocityY(-100);
+                gameOptions.playerGravity += 50;
+            }
         }
         // recycling platforms
         let minDistance = game.config.width;
