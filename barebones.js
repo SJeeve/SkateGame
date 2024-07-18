@@ -88,7 +88,7 @@ class preloadGame extends Phaser.Scene {
     }
     preload() {
         this.load.image("platform", "/Assets/PixlSkateFloor.png");
-
+        this.load.audio('powerMove', 'SFX/powerMove.wav');
         this.load.spritesheet("player", "/Assets/gray.png", {
             frameWidth: 24,
             frameHeight: 48
@@ -111,13 +111,14 @@ var sfx;
 class playGame extends Phaser.Scene {
     score = 0;
     gui;
+    
     constructor() {
         super("PlayGame");
     }
 
     create() {
-
-
+        sfx = this.sound.add('powerMove');
+        sfx.play();
         this.gui = this.add.text(16, 16, '', {fontSize: '32px', fill: '#000'});
 
 
@@ -125,7 +126,7 @@ class playGame extends Phaser.Scene {
         this.platformGroup = this.add.group({
 
             // once a platform is removed, it's added to the pool
-            removeCallback: function (platform) {        enemyPercent: 25
+            removeCallback: function (platform) {       
                 platform.scene.platformPool.add(platform)
             }
         });
@@ -363,13 +364,12 @@ class playGame extends Phaser.Scene {
     update(){
         
         // game over
-        if(this.player.y > game.config.height){
-            sfx.stop();
         if (this.player.y > game.config.height) {
             this.gui.setText(0);
             this.score = 0;
+            sfx.stop();
             this.scene.start("PlayGame");
-            
+
         }
     
         this.player.x = gameOptions.playerStartPosition;
@@ -398,19 +398,13 @@ class playGame extends Phaser.Scene {
         }, this);
     
         // recycling enemy
-<<<<<<< HEAD
-        this.enemyGroup.getChildren().forEach(function(enemy){
-            if((enemy.x < - enemy.displayWidth / 2) || (enemy.x < - enemy.displayWidth / 2)){
-=======
         this.enemyGroup.getChildren().forEach(function (enemy) {
             if (enemy.x < - enemy.displayWidth / 2) {
->>>>>>> ebe4b64fbf073ef00a18438416c48d08d9e61eb5
                 this.enemyGroup.killAndHide(enemy);
                 this.enemyGroup.remove(enemy);
             }
         }, this);
 
-}
         // adding new platforms
         if (minDistance > this.nextPlatformDistance) {
             let nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
@@ -422,5 +416,5 @@ class playGame extends Phaser.Scene {
             this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2, nextPlatformHeight);
         }
     }
-
+}
 
