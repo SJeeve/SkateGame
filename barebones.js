@@ -25,7 +25,7 @@ let gameOptions = {
     playerGravity: 900,
 
     // player jump force
-    jumpForce: 400,
+    jumpForce: 450,
 
     // player starting X position
     playerStartPosition: 200,
@@ -37,9 +37,17 @@ let gameOptions = {
     coinPercent: 25,
 
     // % of probability a enemy appears on the platform
+<<<<<<< HEAD
     enemyPercent: 40
 };
 window.onload = function () {
+=======
+    enemyPercent: 60
+
+};
+
+window.onload = function() {
+>>>>>>> 7ae169c81d347ffba0ed8ab774dad163cd231e8c
 
     // object containing configuration options
     let gameConfig = {
@@ -47,7 +55,7 @@ window.onload = function () {
         width: 800,
         height: 600,
         scene: [preloadGame, playGame],
-        backgroundColor: 0x0c88c7,
+        backgroundColor: 0x000000,
 
         // physics settings
         physics: {
@@ -133,8 +141,13 @@ class playGame extends Phaser.Scene {
         this.platformGroup = this.add.group({
 
             // once a platform is removed, it's added to the pool
+<<<<<<< HEAD
             removeCallback: function (platform) {
                 platform.scene.platformPool.add(platform);
+=======
+            removeCallback: function (platform) {        enemyPercent: 25
+                platform.scene.platformPool.add(platform)
+>>>>>>> 7ae169c81d347ffba0ed8ab774dad163cd231e8c
             }
         });
 
@@ -239,15 +252,12 @@ class playGame extends Phaser.Scene {
 
         }, null, this);
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function(player, enemy){
-            enemy.body.enable = false;
+            
             health--;
-            sleep(1000).then(() => {if(health <= 0)
+            //move enemy that was hit (enemy) to the updated location
+                if(health <= 0)
                 {
                     sfx.stop();
                     this.player.anims.stop();
@@ -255,14 +265,13 @@ class playGame extends Phaser.Scene {
                     this.player.body.setVelocityY(-200);
                     this.physics.world.removeCollider(this.platformCollider);
     
-                }});
+                };
             
 
         }, null, this);
 
         // checking for input
-        let w = this.input.keyboard.addKey('W');
-        w.on('down', this.jump, this);
+
         let up = this.input.keyboard.addKey('W');
         up.on("down", this.jump, this);
         let down = this.input.keyboard.addKey('S');
@@ -377,12 +386,18 @@ class playGame extends Phaser.Scene {
     update();{
         
         // game over
+<<<<<<< HEAD
         if(!gameOver&&this.player.y > game.config.height){
             gameOver = true;
             sfx.stop();
             deathSound.play();
             this.time.delayedCall(2600, () => this.scene.start("PlayGame"), null, this);
             this.player.y > game.config.height);{
+=======
+        if(this.player.y > game.config.height){
+            sfx.stop();
+        if (this.player.y > game.config.height) {
+>>>>>>> 7ae169c81d347ffba0ed8ab774dad163cd231e8c
             this.gui.setText(0);
             this.score = 0;
             this.scene.start("PlayGame");
@@ -414,8 +429,13 @@ class playGame extends Phaser.Scene {
         }, this);
     
         // recycling enemy
+<<<<<<< HEAD
+        this.enemyGroup.getChildren().forEach(function(enemy){
+            if((enemy.x < - enemy.displayWidth / 2) || (enemy.x < - enemy.displayWidth / 2)){
+=======
         this.enemyGroup.getChildren().forEach(function (enemy) {
             if (enemy.x < - enemy.displayWidth / 2) {
+>>>>>>> ebe4b64fbf073ef00a18438416c48d08d9e61eb5
                 this.enemyGroup.killAndHide(enemy);
                 this.enemyGroup.remove(enemy);
             }
