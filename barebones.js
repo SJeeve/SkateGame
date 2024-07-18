@@ -19,7 +19,7 @@ let gameOptions = {
     platformHeighScale: 20,
 
     // platform max and min height, as screen height ratio
-    platformVerticalLimit: [0.4, 0.8],
+    platformVerticalLimit: [0.50, 0.8],
 
     // player gravity
     playerGravity: 900,
@@ -37,9 +37,8 @@ let gameOptions = {
     coinPercent: 25,
 
     // % of probability a enemy appears on the platform
-    enemyPercent: 25
+    enemyPercent: 40
 }
-
 window.onload = function () {
 
     // object containing configuration options
@@ -102,10 +101,10 @@ class preloadGame extends Phaser.Scene {
 
         this.scene.start("PlayGame");
     }
-};
-
-
-
+}
+var health;
+var lastHeight;
+var sfx;
 // playGame scene
 class playGame extends Phaser.Scene {
     score = 0;
@@ -156,12 +155,12 @@ class playGame extends Phaser.Scene {
             }
         });
 
-        // group with all active enemycamps.
+        // group with all active enemy
         this.enemyGroup = this.add.group({
 
-            // once a enemycamp is removed, it's added to the pool
-            removeCallback: function (enemy) {
-                enemy.scene.enemyPool.add(enemy)
+            // once an enemy is removed, it's added to the pool
+            removeCallback: function(enemy){
+                enemy.scene.enemyPool.add(enemy);
             }
         });
 
@@ -229,19 +228,32 @@ class playGame extends Phaser.Scene {
 
         }, null, this);
 
-        // setting collisions between the player and the enemy group
-        this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
-            this.dying = true;
-            this.player.anims.stop();
-            this.player.setFrame(2);
-            this.player.body.setVelocityY(-200);
-            this.physics.world.removeCollider(this.platformCollider);
+        // setting collisions between the player and the enemy group
+        this.physics.add.overlap(this.player, this.enemyGroup, function(player, enemy){
+            enemy.body.enable = false;
+            health--;
+            sleep(1000).then(() => {if(health <= 0)
+                {
+                    sfx.stop();
+                    this.player.anims.stop();
+                    this.player.setFrame(2);
+                    this.player.body.setVelocityY(-200);
+                    this.physics.world.removeCollider(this.platformCollider);
+    
+                }});
+            
 
         }, null, this);
 
         // checking for input
-        this.input.on("pointerdown", this.jump, this);
+        let w = this.input.keyboard.addKey('W');
+        w.on('down', this.jump, this);
+        let up = this.input.keyboard.addKey('W');
+        up.on("down", this.jump, this);
         let down = this.input.keyboard.addKey('S');
         down.on('down', this.quickDrop, this)
 
@@ -313,8 +325,8 @@ class playGame extends Phaser.Scene {
             }
     
             // is there a enemy over the platform?
-            if (Phaser.Math.Between(1, 100) <= gameOptions.enemyPercent) {
-                if (this.enemyPool.getLength()) {
+            if((Phaser.Math.Between(1, 100) <= gameOptions.enemyPercent) && (platformWidth > 170)){
+                if(this.enemyPool.getLength()){
                     let enemy = this.enemyPool.getFirst();
                     enemy.x = posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth);
                     enemy.y = posY - 46;
@@ -392,8 +404,8 @@ class playGame extends Phaser.Scene {
                 this.enemyGroup.remove(enemy);
             }
         }, this);
-    
-    
+
+}
         // adding new platforms
         if (minDistance > this.nextPlatformDistance) {
             let nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
@@ -406,4 +418,4 @@ class playGame extends Phaser.Scene {
         }
     }
 
-};
+
