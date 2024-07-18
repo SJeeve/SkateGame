@@ -53,7 +53,9 @@ window.onload = function() {
         // physics settings
         physics: {
             default: "arcade",
-            debug: true
+            arcade:{
+                debug: true
+            }
         }
     }
     game = new Phaser.Game(gameConfig);
@@ -75,52 +77,12 @@ class preloadGame extends Phaser.Scene{
             frameHeight: 48
         });
 
-        this.load.spritesheet("coin", "/Assets/gray.png", {
-            frameWidth: 20,
-            frameHeight: 20
-        });
-
-        this.load.spritesheet("enemy", "/Assets/gray.png", {
-            frameWidth: 40,
-            frameHeight: 70
-        });
-
     }
     create(){
 
         // setting player animation
-        this.anims.create({
-            key: "run",
-            frames: this.anims.generateFrameNumbers("player", {
-                start: 0,
-                end: 1
-            }),
-            frameRate: 8,
-            repeat: -1
-        });
+ 
 
-        // setting coin animation
-        this.anims.create({
-            key: "rotate",
-            frames: this.anims.generateFrameNumbers("coin", {
-                start: 0,
-                end: 5
-            }),
-            frameRate: 15,
-            yoyo: true,
-            repeat: -1
-        });
-
-        // setting enemy animation
-        this.anims.create({
-            key: "burn",
-            frames: this.anims.generateFrameNumbers("enemy", {
-                start: 0,
-                end: 4
-            }),
-            frameRate: 15,
-            repeat: -1
-        });
 
         this.scene.start("PlayGame");
     }
@@ -245,8 +207,15 @@ class playGame extends Phaser.Scene{
 
         // checking for input
         this.input.on("pointerdown", this.jump, this);
+        let down = this.input.keyboard.addKey('S');
+        down.on('down', this.quickDrop, this)
     }
 
+    quickDrop(){
+        if(!(this.player.body.touching.down)){
+            this.player.setVelocityY(1000);
+        }
+    }
 
     // the core of the script: platform are added from the pool or created on the fly
     addPlatform(platformWidth, posX, posY){
