@@ -66,6 +66,7 @@ window.onload = function() {
     window.addEventListener("resize", resize, false);
 };
 
+
 // preloadGame scene
 class preloadGame extends Phaser.Scene{
     constructor(){
@@ -75,17 +76,14 @@ class preloadGame extends Phaser.Scene{
 
         this.load.image("platform", "/Assets/PixlSkateFloor.png");
         this.load.audio('powerMove', 'SFX/powerMove.wav');
-        this.load.spritesheet("player", "/Assets/gray.png", {
-            frameWidth: 24,
-            frameHeight: 48
-        });
-
+        this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
 
     }
     create(){
 
         // setting player animation
- 
+        this
+
 
 
         this.scene.start("PlayGame");
@@ -171,9 +169,13 @@ class playGame extends Phaser.Scene{
         this.addPlatform(game.config.width, game.config.width / 2, game.config.height * gameOptions.platformVerticalLimit[1]);
 
         // adding the player;
-        this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height * 0.7, "player");
+        this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height * 0.5, "player");
         this.player.setGravityY(gameOptions.playerGravity);
         this.player.setDepth(2);
+        this.anims.create({key: 'katie_skating', frames: this.anims.generateFrameNames('player', {prefix: 'katierolling', start: 1, end: 5, zeroPad: 3}), repeat: -1, frameRate: 7});
+        this.player.play('katie_skating')
+        this.player.setScale(.1)
+
 
         // the player is not dying
         this.dying = false;
