@@ -37,17 +37,11 @@ let gameOptions = {
     coinPercent: 25,
 
     // % of probability a enemy appears on the platform
-<<<<<<< HEAD
-    enemyPercent: 40
-};
-window.onload = function () {
-=======
     enemyPercent: 60
 
 };
 
 window.onload = function() {
->>>>>>> 7ae169c81d347ffba0ed8ab774dad163cd231e8c
 
     // object containing configuration options
     let gameConfig = {
@@ -87,6 +81,7 @@ function resize() {
     }
 }
 
+
 // preloadGame scene
 class preloadGame extends Phaser.Scene {
     constructor() {
@@ -102,6 +97,7 @@ class preloadGame extends Phaser.Scene {
             frameWidth: 24,
             frameHeight: 48
         });
+        this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
 
     }
     create() {
@@ -141,13 +137,8 @@ class playGame extends Phaser.Scene {
         this.platformGroup = this.add.group({
 
             // once a platform is removed, it's added to the pool
-<<<<<<< HEAD
-            removeCallback: function (platform) {
-                platform.scene.platformPool.add(platform);
-=======
             removeCallback: function (platform) {        enemyPercent: 25
                 platform.scene.platformPool.add(platform)
->>>>>>> 7ae169c81d347ffba0ed8ab774dad163cd231e8c
             }
         });
 
@@ -217,10 +208,15 @@ class playGame extends Phaser.Scene {
         this.addPlatform(game.config.width, game.config.width / 2, game.config.height * gameOptions.platformVerticalLimit[1]);
 
         // adding the player;
-        this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height * 0.7, "player");
+        this.player = this.physics.add.sprite(gameOptions.playerStartPosition, game.config.height * 0.5, "player");
         this.player.setGravityY(gameOptions.playerGravity);
         this.player.setDepth(2);
-        
+        this.anims.create({key: 'katie_skating', frames: this.anims.generateFrameNames('player', {prefix: 'katierolling', start: 1, end: 5, zeroPad: 3}), repeat: -1, frameRate: 7});
+        this.player.play('katie_skating')
+        this.player.setScale(.15)
+        this.player.body.width = 100
+
+
         // the player is not dying
         this.dying = false;
 
@@ -386,18 +382,13 @@ class playGame extends Phaser.Scene {
     update();{
         
         // game over
-<<<<<<< HEAD
         if(!gameOver&&this.player.y > game.config.height){
             gameOver = true;
             sfx.stop();
             deathSound.play();
             this.time.delayedCall(2600, () => this.scene.start("PlayGame"), null, this);
-            this.player.y > game.config.height);{
-=======
-        if(this.player.y > game.config.height){
+            if (this.player.y > game.config.height){
             sfx.stop();
-        if (this.player.y > game.config.height) {
->>>>>>> 7ae169c81d347ffba0ed8ab774dad163cd231e8c
             this.gui.setText(0);
             this.score = 0;
             this.scene.start("PlayGame");
@@ -429,13 +420,8 @@ class playGame extends Phaser.Scene {
         }, this);
     
         // recycling enemy
-<<<<<<< HEAD
-        this.enemyGroup.getChildren().forEach(function(enemy){
-            if((enemy.x < - enemy.displayWidth / 2) || (enemy.x < - enemy.displayWidth / 2)){
-=======
         this.enemyGroup.getChildren().forEach(function (enemy) {
             if (enemy.x < - enemy.displayWidth / 2) {
->>>>>>> ebe4b64fbf073ef00a18438416c48d08d9e61eb5
                 this.enemyGroup.killAndHide(enemy);
                 this.enemyGroup.remove(enemy);
             }
@@ -454,4 +440,4 @@ class playGame extends Phaser.Scene {
         }
     }
 
-
+    }}
