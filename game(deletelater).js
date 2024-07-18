@@ -5,14 +5,20 @@ let gameOptions = {
     platformStartSpeed: 350,
     spawnRange: [100, 350],
     platformSizeRange: [150, 500],
-    playerGravity: 2500,
+    playerGravity: 900,
+    player_Gravity: 900,
     jumpForce: 400,
     playerStartPosition: 200,
     jumps: 2,
-    firstPlatform: true
+    firstPlatform: true,
+    gravity: 10,
+    jump_Strength: 100,
 }
 
-let jumpStrength = 0;
+var jumpStrength = 0;
+const gravity = 10;
+const jump_Strength = 400;
+
 
 window.onload = function() {
  
@@ -35,28 +41,31 @@ window.onload = function() {
             target: 60,
             forceSetTimeOut: true
         }
+
     }
     game = new Phaser.Game(gameConfig);
     window.focus();
     resize();
     window.addEventListener("resize", resize, false);
+    var jumpStrength = 0;
 }
  
 // playGame scene
 class playGame extends Phaser.Scene{
     constructor(){
         super("PlayGame");
+        this.space = null;
     }
     preload(){
         this.load.image("platform", "/Assets/platform.png");
         this.load.image("playerSprite", "/Assets/test.png");
     }
     create(){
+        this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.maxHeight = 100;
         let jumpStrength = 0;
         let cursors = this.input.keyboard.createCursorKeys();
         let down = this.input.keyboard.addKey('S');
-        let space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         down.on('down', this.quickDrop, this);
         this.platformGroup = this.add.group({
  
@@ -125,35 +134,28 @@ class playGame extends Phaser.Scene{
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
 
-   /* jump(){
-        if(this.player.body.touching.down){
-           gameOptions.jumpStrength = gameOptions.jumpForce; 
-        }
-    } */
-
     update(){
         // game over
-
-        let space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         if(this.player.y > game.config.height){
             this.scene.start("PlayGame");
         }
         this.player.x = gameOptions.playerStartPosition;
-        if (this.player.body.touching.down) {
-            this.jumpStrength = 0;
-        }
-    
-        // When player presses space and is on the ground, initiate jump
-        if (this.player.body.touching.down && space.isDown) {
-            this.jumpStrength = gameOptions.jumpForce;
-            this.player.setVelocityY(-this.jumpStrength);
-            this.jumpStrength /= 1.5;
-        }
-        // When player is in the air and holding space, reduce jump force gradually
-        else if (!this.player.body.touching.down && space.isDown) {
-            if (this.jumpStrength > 0) {
-                this.player.setVelocityY(this.player.body.velocity.y - this.jumpStrength);
-                this.jumpStrength -= 40; // Adjust this value as needed for the gradual decrease
+        if(this.player.body.touching.down && this.space.isDown){
+            if(gameOptions.playerGravity === gameOptions.player_Gravity)
+            {
+                gameOptions.playerGravity = gameOptions.player_Gravity / 2;
+                this.player.setVelocityY(100);
+            }
+        } else if(!(this.player.body.touching.down) && !(this.space.isDown))
+        {
+            this.player.setVelocityY(100);
+            gameOptions.playerGravity = gameOptions.player_Gravity;
+        } else if(!(this.player.body.touching.down) && this.space.isDown)
+        {
+            if(gameOptions.playerGravity < 900)
+            {
+                this.player.setVelocityY(100);
+                gameOptions.playerGravity += 50;
             }
         }
         // recycling platforms

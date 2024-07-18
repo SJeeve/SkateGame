@@ -1,25 +1,31 @@
 <!DOCTYPE html>
-<html>
-	<head>
-        <style type = "text/css">
-            body{
-                background: #000000;
-                padding: 0px;
-                margin: 0px;
-            }
-            canvas{
-                display:block;
-                margin: 0;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
-        </style>
-        <script src = "phaser.min.js"></script>
-        <script src = "game.js"></script>
-        <script src = "gameModule.js"></script>
-    </head>
-	<body>
-	</body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katie's Skate Run</title>
+    <style>
+        body {
+            background-color: #000000;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        canvas {
+            display: block;
+            margin: 0 auto; /* Center the canvas horizontally */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 5px solid gray; /* Optional: add a border */
+        }
+    </style>
+    <script src="phaser.min.js"></script>
+    <script src="game.js"></script>
+    <script src="gameModule.js"></script>
+</head>
+<body>
+    <!-- Optional: Add any additional HTML content here -->
+</body>
 </html>

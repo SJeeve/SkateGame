@@ -5,7 +5,8 @@ let gameOptions = {
     platformStartSpeed: 350,
     spawnRange: [100, 350],
     platformSizeRange: [150, 500],
-    playerGravity: 100,
+    playerGravity: 900,
+    player_Gravity: 900,
     jumpForce: 400,
     playerStartPosition: 200,
     jumps: 2,
@@ -109,7 +110,6 @@ class playGame extends Phaser.Scene {
         platform.displayWidth = platformWidth;
         this.nextPlatformDistance = Phaser.Math.Between(gameOptions.spawnRange[0], gameOptions.spawnRange[1]);
     }
-
     update() {
         if (this.player.y > game.config.height) {
             console.log("Game over: restarting scene");
@@ -128,6 +128,30 @@ class playGame extends Phaser.Scene {
             this.player.setVelocityY(this.player.body.velocity.y + gameOptions.gravity);
         } else {
             jumpStrength = 0;
+        }
+    update();
+        // game over
+        if(this.player.y > game.config.height){
+            this.scene.start("PlayGame");
+        }
+        this.player.x = gameOptions.playerStartPosition;
+        if(this.player.body.touching.down && this.space.isDown){
+            if(gameOptions.playerGravity === gameOptions.player_Gravity)
+            {
+                gameOptions.playerGravity = gameOptions.player_Gravity / 2;
+                this.player.setVelocityY(-100);
+            }
+        } else if(!(this.player.body.touching.down) && !(this.space.isDown))
+        {
+            this.player.setVelocityY(-100);
+            gameOptions.playerGravity = gameOptions.player_Gravity;
+        } else if(!(this.player.body.touching.down) && this.space.isDown)
+        {
+            if(gameOptions.playerGravity < 900)
+            {
+                this.player.setVelocityY(-100);
+                gameOptions.playerGravity += 50;
+            }
         }
 
         let minDistance = game.config.width;
