@@ -228,7 +228,8 @@ class playGame extends Phaser.Scene{
         }, null, this);
 
         // checking for input
-
+        let w = this.input.keyboard.addKey('W');
+        w.on('down', this.jump, this);
         let up = this.input.keyboard.addKey('W');
         up.on("down", this.jump, this);
         let down = this.input.keyboard.addKey('S');
