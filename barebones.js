@@ -126,7 +126,7 @@ class playGame extends Phaser.Scene {
     }
     create() {
         gameOver = false;
-        sfx = sfx || this.sound.add('powerMove(no eq)');
+        sfx = sfx || this.sound.add('powerMove');
         jumpSound = this.sound.add('jump');
         deathSound = this.sound.add('gameOver');
         pickupCoin = this.sound.add('pickupCoin');
@@ -372,7 +372,6 @@ class playGame extends Phaser.Scene {
             this.player.setVelocityY(gameOptions.jumpForce * -1);
             this.playerJumps++;
             jumpSound.play();
-            this.playerJumps++;
             // stops animation
             this.player.anims.stop();
         }
