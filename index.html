@@ -71,6 +71,12 @@
             text-align: left;
             margin: 20px;
         }
+        .tutorial-image {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -101,20 +107,7 @@
 
     <div class="tutorial-menu" id="tutorialMenu">
         <h2>Tutorial</h2>
-        <div class="tutorial-content">
-            <h3>Controls</h3>
-            <ul>
-                <li>Move Left: <strong>A</strong></li>
-                <li>Move Right: <strong>D</strong></li>
-                <li>Jump: <strong>W</strong></li>
-                <li>Pause: <strong>Escape</strong></li>
-            </ul>
-            <h3>Objective</h3>
-            <p>
-                Your goal is to navigate Katie through the skate park, avoid obstacles, and collect as many points
-                as possible. Go as far as you can!
-            </p>
-        </div>
+        <img src="Images/tutorialScreen.png" alt="Tutorial Screen" class="tutorial-image">
         <button onclick="showMainMenu()"><img src="Buttons/backButton.png" alt="Back" /></button>
     </div>
     
