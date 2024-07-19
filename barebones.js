@@ -91,7 +91,7 @@ class preloadGame extends Phaser.Scene {
         this.load.image("platform", "/Assets/PixlSkateFloor.png");
         this.load.audio('powerMove', 'SFX/powerMove.wav');
         this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
-
+        this.load.image("enemy", "/Assets/redshirt.png")
     }
     create() {
 
@@ -158,10 +158,12 @@ class playGame extends Phaser.Scene {
 
         // group with all active enemy
         this.enemyGroup = this.add.group({
+            
 
             // once an enemy is removed, it's added to the pool
             removeCallback: function(enemy){
                 enemy.scene.enemyPool.add(enemy);
+                
             }
         });
 
@@ -201,7 +203,7 @@ class playGame extends Phaser.Scene {
         this.anims.create({key: 'katie_skating', frames: this.anims.generateFrameNames('player', {prefix: 'katierolling', start: 1, end: 5, zeroPad: 3}), repeat: -1, frameRate: 7});
         this.player.play('katie_skating')
         this.player.setScale(.15)
-        this.player.body.width = 100
+        this.player.setSize(500, 900, false);
 
 
         // the player is not dying
@@ -330,15 +332,18 @@ class playGame extends Phaser.Scene {
             if((Phaser.Math.Between(1, 100) <= gameOptions.enemyPercent) && (platformWidth > 170)){
                 if(this.enemyPool.getLength()){
                     let enemy = this.enemyPool.getFirst();
+                    enemy.setScale(.15)
                     enemy.x = posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth);
                     enemy.y = posY - 46;
                     enemy.alpha = 1;
                     enemy.active = true;
                     enemy.visible = true;
                     this.enemyPool.remove(enemy);
+                    
                 }
                 else {
                     let enemy = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 46, "enemy");
+                    enemy.setScale(.15)
                     enemy.setImmovable(true);
                     enemy.setVelocityX(platform.body.velocity.x);
                     enemy.setSize(8, 2, true)
