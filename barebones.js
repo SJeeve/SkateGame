@@ -49,7 +49,7 @@ window.onload = function () {
         width: 900,
         height: 675,
 
-        scene: [preloadGame, playGame],
+        scene: [preloadGame, PlayGame],
         // physics settings
         physics: {
             default: "arcade",
@@ -93,11 +93,18 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
+<<<<<<< HEAD
         this.load.atlas("player", "Assets/katie.png", "/Assets/katie.json")
         this.load.image("lights", "Assets/lights.png");
         this.load.image("enemy", "Assets/redshirt.png");
         this.load.image('background', 'Assets/background.png');
         this.load.image('coin', 'Assets/Star.png');
+=======
+        this.load.atlas("player", "Assets/katie.png", "Assets/katie.json")
+        this.load.image("lights", "Assets/Light.png");
+        this.load.image("enemy", "Assets/redshirt.png");
+        this.load.image('background', 'Assets/background.png');
+>>>>>>> 90de481a02b3d374c1f244771bc0cf90b258e9e7
     }
     create() {
         this.scene.start("PlayGame");
@@ -125,6 +132,8 @@ class playGame extends Phaser.Scene {
     create() {
         var bg = this.add.image(game.scale.width/2, game.scale.height/2, 'background');
         bg.setScale(2)
+        var lights = this.add.image(game.scale.width/2, game.scale.height / 5.5, 'lights');
+        lights.setScale(1.0);
         this.score = 0;
         //highscore = 0;
         console.log("start score " + this.score)

@@ -71,15 +71,21 @@
             text-align: left;
             margin: 20px;
         }
+        .tutorial-image {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="menu active" id="mainMenu">
         <h1>Katie's Skate Run</h1>
-        <button onclick="startGame()"><img src="Buttons/playButton.png" alt="Start Game" /></button>
-        <button onclick="showTutorial()"><img src="Buttons/tutorialButton.png" alt="Tutorial" /></button>
-        <button onclick="showSettings()"><img src="Buttons/settingsButton.png" alt="Settings" /></button>
-        <button onclick="quitGame()"><img src="Buttons/quitButton.png" alt="Quit" /></button>
+        <button onclick="startGame()"><img src="Buttons/Playbutton.png" alt="Start Game" /></button>
+        <button onclick="showTutorial()"><img src="Buttons/Tutorialbutton.png" alt="Tutorial" /></button>
+        <button onclick="showSettings()"><img src="Buttons/Settingsbutton.png" alt="Settings" /></button>
+        <button onclick="quitGame()"><img src="Buttons/Quitbutton.png" alt="Quit" /></button>
     </div>
 
     <div class="settings-menu" id="settingsMenu">
@@ -96,25 +102,12 @@
                 oninput="updateVolume(this.value)" />
             <div class="percentage" id="volumePercentage">50%</div>
         </div>
-        <button onclick="showMainMenu()"><img src="Buttons/backButton.png" alt="Back" /></button>
+        <button onclick="showMainMenu()"><img src="Buttons/Backbutton.png" alt="Back" /></button>
     </div>
 
     <div class="tutorial-menu" id="tutorialMenu">
         <h2>Tutorial</h2>
-        <div class="tutorial-content">
-            <h3>Controls</h3>
-            <ul>
-                <li>Move Left: <strong>A</strong></li>
-                <li>Move Right: <strong>D</strong></li>
-                <li>Jump: <strong>W</strong></li>
-                <li>Pause: <strong>Escape</strong></li>
-            </ul>
-            <h3>Objective</h3>
-            <p>
-                Your goal is to navigate Katie through the skate park, avoid obstacles, and collect as many points
-                as possible. Go as far as you can!
-            </p>
-        </div>
+        <img src="Images/tutorialScreen.png" alt="Tutorial Screen" class="tutorial-image">
         <button onclick="showMainMenu()"><img src="Buttons/backButton.png" alt="Back" /></button>
     </div>
     
