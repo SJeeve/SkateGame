@@ -88,13 +88,13 @@ class preloadGame extends Phaser.Scene {
         super("PreloadGame");
     }
     preload() {
-        this.load.image("platform", "/Assets/PixlSkateFloor.png");
+        this.load.image("platform", "Assets/PixlSkateFloor.png");
         this.load.audio('powerMove', 'SFX/powerMove.wav');
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-        this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
-        this.load.image("lights", "/Assets/lights.png");
+        this.load.atlas("player", "Assets/katie.png", "Assets/katie.json")
+        this.load.image("lights", "Assets/lights.png");
     }
     create() {
         this.scene.start("PlayGame");
