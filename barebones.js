@@ -94,7 +94,7 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
         this.load.atlas("player", "Assets/katie.png", "/Assets/katie.json")
-        this.load.image("lights", "Assets/Lights.png");
+        this.load.image("lights", "Assets/Light.png");
         this.load.image("enemy", "Assets/redshirt.png");
         this.load.image('background', 'Assets/background.png');
         this.load.image('coin', 'Assets/Star.png');
