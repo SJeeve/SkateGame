@@ -46,8 +46,8 @@ window.onload = function () {
     // object containing configuration options
     let gameConfig = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: 900,
+        height: 675,
         scene: [preloadGame, playGame],
         backgroundColor: 0x000000,
 
@@ -93,19 +93,10 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-        // this.load.spritesheet("player", "/Assets/gray.png", {
-        //     frameWidth: 24,
-        //     frameHeight: 48
-        // });
         this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
-        this.load.image("enemy", "/Assets/redshirt.png")
+        this.load.image("lights", "/Assets/lights.png");
     }
     create() {
-
-        // setting player animation
-
-
-
         this.scene.start("PlayGame");
     }
 }
@@ -171,12 +162,10 @@ class playGame extends Phaser.Scene {
 
         // group with all active enemy
         this.enemyGroup = this.add.group({
-            
 
             // once an enemy is removed, it's added to the pool
             removeCallback: function (enemy) {
                 enemy.scene.enemyPool.add(enemy);
-                
             }
         });
 
@@ -215,8 +204,13 @@ class playGame extends Phaser.Scene {
         this.player.setDepth(2);
         this.anims.create({ key: 'katie_skating', frames: this.anims.generateFrameNames('player', { prefix: 'katierolling', start: 1, end: 5, zeroPad: 3 }), repeat: -1, frameRate: 7 });
         this.player.play('katie_skating')
+<<<<<<< HEAD
         this.player.setScale(.17);
         this.player.setSize(500, 900, false);
+=======
+        this.player.setScale(.15)
+        this.player.body.width = 100
+>>>>>>> 559445e6f478a9e15a2cb9079bd89457a056e9a8
 
 
         // the player is not dying
@@ -345,18 +339,23 @@ class playGame extends Phaser.Scene {
             if ((Phaser.Math.Between(1, 100) <= gameOptions.enemyPercent) && (platformWidth > 170)) {
                 if (this.enemyPool.getLength()) {
                     let enemy = this.enemyPool.getFirst();
+<<<<<<< HEAD
                     enemy.setScale(.13)
+=======
+>>>>>>> 559445e6f478a9e15a2cb9079bd89457a056e9a8
                     enemy.x = posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth);
                     enemy.y = posY - 46;
                     enemy.alpha = 1;
                     enemy.active = true;
                     enemy.visible = true;
                     this.enemyPool.remove(enemy);
-                    
                 }
                 else {
                     let enemy = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 46, "enemy");
+<<<<<<< HEAD
                     enemy.setScale(.13)
+=======
+>>>>>>> 559445e6f478a9e15a2cb9079bd89457a056e9a8
                     enemy.setImmovable(true);
                     enemy.setVelocityX(platform.body.velocity.x);
                     enemy.setSize(8, 2, true);
