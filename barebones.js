@@ -238,11 +238,7 @@ class playGame extends Phaser.Scene {
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
-            if(this.dropping){
-                this.enemy
-            }else{
                 health--;
-            }
             //move enemy that was hit (enemy) to the updated location
             if (health <= 0) {
                 this.dying = true;
