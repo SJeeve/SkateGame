@@ -215,7 +215,7 @@ class playGame extends Phaser.Scene {
         this.player.setDepth(2);
         this.anims.create({ key: 'katie_skating', frames: this.anims.generateFrameNames('player', { prefix: 'katierolling', start: 1, end: 5, zeroPad: 3 }), repeat: -1, frameRate: 7 });
         this.player.play('katie_skating')
-        this.player.setScale(.15)
+        this.player.setScale(.17);
         this.player.setSize(500, 900, false);
 
 
@@ -345,7 +345,7 @@ class playGame extends Phaser.Scene {
             if ((Phaser.Math.Between(1, 100) <= gameOptions.enemyPercent) && (platformWidth > 170)) {
                 if (this.enemyPool.getLength()) {
                     let enemy = this.enemyPool.getFirst();
-                    enemy.setScale(.15)
+                    enemy.setScale(.13)
                     enemy.x = posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth);
                     enemy.y = posY - 46;
                     enemy.alpha = 1;
@@ -356,7 +356,7 @@ class playGame extends Phaser.Scene {
                 }
                 else {
                     let enemy = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 46, "enemy");
-                    enemy.setScale(.15)
+                    enemy.setScale(.13)
                     enemy.setImmovable(true);
                     enemy.setVelocityX(platform.body.velocity.x);
                     enemy.setSize(8, 2, true);
