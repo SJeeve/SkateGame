@@ -34,7 +34,7 @@ let gameOptions = {
     jumps: 2,
 
     // % of probability a coin appears on the platform
-    coinPercent: 25,
+    coinPercent: 100,
 
     // % of probability a enemy appears on the platform
     enemyPercent: 60
@@ -80,6 +80,7 @@ function resize() {
     }
 }
 
+var highscore = 0;
 
 // preloadGame scene
 class preloadGame extends Phaser.Scene {
@@ -92,10 +93,11 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-        this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
-        this.load.image("lights", "/Assets/lights.png");
-        this.load.image("enemy", "/Assets/redshirt.png");
-        this.load.image('background', '/Assets/background.png');
+        this.load.atlas("player", "Assets/katie.png", "/Assets/katie.json")
+        this.load.image("lights", "Assets/lights.png");
+        this.load.image("enemy", "Assets/redshirt.png");
+        this.load.image('background', 'Assets/background.png');
+        this.load.image('coin', 'Assets/Star.png');
     }
     create() {
         this.scene.start("PlayGame");
@@ -111,8 +113,9 @@ var pickupCoin;
 var score;
 var coinGroup = [];
 var dropping;
+var Highscore_Text
 // playGame scene
-class PlayGame extends Phaser.Scene {
+class playGame extends Phaser.Scene {
     
     gui;
     dropping = false;
@@ -123,6 +126,7 @@ class PlayGame extends Phaser.Scene {
         var bg = this.add.image(game.scale.width/2, game.scale.height/2, 'background');
         bg.setScale(2)
         this.score = 0;
+        //highscore = 0;
         console.log("start score " + this.score)
         dropping = false;
         gameOver = false;
@@ -133,6 +137,7 @@ class PlayGame extends Phaser.Scene {
         sfx.play();
         health = 3;
         this.gui = this.add.text(16, 16, '', { fontSize: '32px', fill: '#999' });
+        this.Highscore_Text = this.add.text(16, 40, 'High Score', { fontSize: '32px', fill: '#999' });
         // group with all active platforms.
         this.platformGroup = this.add.group({
 
@@ -294,10 +299,15 @@ class PlayGame extends Phaser.Scene {
     // Function to update the score display on the webpage
     updateScoreDisplay() {
         this.gui.setText(this.score);
+        this.Highscore_Text.setText('High Score: ' + highscore);
+        
     }
     // Function to increment the score
     addScore() {
         this.score++;
+        if (highscore <= this.score){
+            highscore = this.score;
+        }
         this.updateScoreDisplay();
     }
 
@@ -341,6 +351,7 @@ class PlayGame extends Phaser.Scene {
             if (Phaser.Math.Between(1, 100) <= gameOptions.coinPercent) {
                 if (this.coinPool.getLength()) {
                     let coin = this.coinPool.getFirst();
+                    coin.setScale(.3);
                     coin.x = posX;
                     coin.y = posY - 96;
                     coin.alpha = 1;
@@ -350,6 +361,9 @@ class PlayGame extends Phaser.Scene {
                 }
                 else {
                     let coin = this.physics.add.sprite(posX, posY - 96, "coin");
+                    coin.setScale(.3);
+                    coin.setOffset(650, 22);
+                    coin.setSize(95, 95, false);
                     coin.setImmovable(true);
                     coin.setVelocityX(platform.body.velocity.x);
                     coin.setDepth(2);
