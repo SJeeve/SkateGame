@@ -50,7 +50,7 @@ window.onload = function () {
         width: 900,
         height: 675,
 
-        scene: [preloadGame, playGame],
+        scene: [preloadGame, PlayGame],
         // physics settings
         physics: {
             default: "arcade",
