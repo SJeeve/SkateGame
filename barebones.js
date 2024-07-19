@@ -81,7 +81,7 @@ function resize() {
 }
 
 var highscore = 0;
-
+var backgroundMusic;
 // preloadGame scene
 class preloadGame extends Phaser.Scene {
     constructor() {
@@ -102,6 +102,9 @@ class preloadGame extends Phaser.Scene {
     }
     create() {
         this.scene.start("PlayGame");
+        backgroundMusic = this.audio.add('powerMove');
+        backgroundMusic.loop = true;
+        backgroundMusic.play();
     }
 }
 var health;
@@ -116,6 +119,7 @@ var coinGroup = [];
 var dropping;
 var Highscore_Text;
 var stompingKids;
+//var backgroungMusic = "SFX/powerMove.wav"
 // playGame scene
 class PlayGame extends Phaser.Scene {
     
