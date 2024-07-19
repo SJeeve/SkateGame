@@ -50,7 +50,7 @@ window.onload = function () {
         width: 900,
         height: 675,
 
-        scene: [preloadGame, playGame],
+        scene: [preloadGame, PlayGame],
         // physics settings
         physics: {
             default: "arcade",
@@ -94,7 +94,7 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-        this.load.atlas("player", "Assets/katie.png", "/Assets/katie.json")
+        this.load.atlas("player", "Assets/katie.png", "Assets/katie.json")
         this.load.image("lights", "Assets/Light.png");
         this.load.image("enemy", "Assets/redshirt.png");
         this.load.image('background', 'Assets/background.png');
@@ -268,9 +268,9 @@ class PlayGame extends Phaser.Scene {
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
-            console.log(this.dropping);
             if(this.dropping)
             {
+                this.score += 7;
                 enemy.x = enemy.x + 100;
                 this.enemyGroup.killAndHide(enemy);
                 this.enemyGroup.remove(enemy);
