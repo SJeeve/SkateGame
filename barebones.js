@@ -49,7 +49,6 @@ window.onload = function () {
         width: 900,
         height: 675,
         scene: [preloadGame, playGame],
-        backgroundColor: 0x000000,
 
         // physics settings
         physics: {
@@ -96,6 +95,7 @@ class preloadGame extends Phaser.Scene {
         this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
         this.load.image("lights", "/Assets/lights.png");
         this.load.image("enemy", "/Assets/redshirt.png");
+        this.load.image('background', '/Assets/background.png');
     }
     create() {
         this.scene.start("PlayGame");
@@ -117,6 +117,8 @@ class playGame extends Phaser.Scene {
         super("PlayGame");
     }
     create() {
+        var bg = this.add.image(game.scale.width/2, game.scale.height/2, 'background');
+        bg.setScale(2)
         gameOver = false;
         sfx = sfx || this.sound.add('powerMove');
         jumpSound = this.sound.add('jump');
@@ -124,7 +126,7 @@ class playGame extends Phaser.Scene {
         pickupCoin = this.sound.add('pickupCoin');
         sfx.play();
         health = 3;
-        this.gui = this.add.text(16, 16, '', { fontSize: '32px', fill: '#000' });
+        this.gui = this.add.text(16, 16, '', { fontSize: '32px', fill: '#999' });
         // group with all active platforms.
         this.platformGroup = this.add.group({
 
@@ -337,7 +339,7 @@ class playGame extends Phaser.Scene {
                     let enemy = this.enemyPool.getFirst();
                     enemy.setScale(.13)
                     enemy.x = posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth);
-                    enemy.y = posY - 46;
+                    enemy.y = posY - 1000;
                     enemy.alpha = 1;
                     enemy.active = true;
                     enemy.visible = true;
