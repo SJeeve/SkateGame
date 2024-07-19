@@ -93,18 +93,11 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-<<<<<<< HEAD
         this.load.atlas("player", "Assets/katie.png", "/Assets/katie.json")
-        this.load.image("lights", "Assets/lights.png");
+        this.load.image("lights", "Assets/Lights.png");
         this.load.image("enemy", "Assets/redshirt.png");
         this.load.image('background', 'Assets/background.png');
         this.load.image('coin', 'Assets/Star.png');
-=======
-        this.load.atlas("player", "Assets/katie.png", "Assets/katie.json")
-        this.load.image("lights", "Assets/Light.png");
-        this.load.image("enemy", "Assets/redshirt.png");
-        this.load.image('background', 'Assets/background.png');
->>>>>>> 90de481a02b3d374c1f244771bc0cf90b258e9e7
     }
     create() {
         this.scene.start("PlayGame");
@@ -122,7 +115,7 @@ var coinGroup = [];
 var dropping;
 var Highscore_Text
 // playGame scene
-class playGame extends Phaser.Scene {
+class PlayGame extends Phaser.Scene {
     
     gui;
     dropping = false;
@@ -373,7 +366,6 @@ class playGame extends Phaser.Scene {
                     coin.setScale(.3);
                     coin.setOffset(650, 22);
                     coin.setSize(95, 95, false);
-                    coin.setImmovable(true);
                     coin.setVelocityX(platform.body.velocity.x);
                     coin.setDepth(2);
                     this.coinGroup.add(coin);
