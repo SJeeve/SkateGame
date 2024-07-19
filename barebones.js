@@ -46,8 +46,8 @@ window.onload = function () {
     // object containing configuration options
     let gameConfig = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: 900,
+        height: 675,
         scene: [preloadGame, playGame],
         backgroundColor: 0x000000,
 
@@ -93,19 +93,10 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-        // this.load.spritesheet("player", "/Assets/gray.png", {
-        //     frameWidth: 24,
-        //     frameHeight: 48
-        // });
         this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
-
+        this.load.image("lights", "/Assets/lights.png");
     }
     create() {
-
-        // setting player animation
-
-
-
         this.scene.start("PlayGame");
     }
 }
