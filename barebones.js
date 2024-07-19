@@ -116,7 +116,7 @@ var coinGroup = [];
 var dropping;
 var Highscore_Text
 // playGame scene
-class playGame extends Phaser.Scene {
+class PlayGame extends Phaser.Scene {
     
     gui;
     dropping = false;
@@ -367,7 +367,6 @@ class playGame extends Phaser.Scene {
                     coin.setScale(.3);
                     coin.setOffset(650, 22);
                     coin.setSize(95, 95, false);
-                    coin.setImmovable(true);
                     coin.setVelocityX(platform.body.velocity.x);
                     coin.setDepth(2);
                     this.coinGroup.add(coin);
