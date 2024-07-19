@@ -210,14 +210,11 @@ class playGame extends Phaser.Scene {
 
         // the player is not dying
         this.dying = false;
-
+        this.dropping = false;
         // setting collisions between the player and the platform group
         this.platformCollider = this.physics.add.collider(this.player, this.platformGroup, function () {
 
-            // play "run" animation if the player is on a platform
-            if (!this.player.anims.isPlaying) {
-                this.player.anims.play("run");
-            }
+
         }, null, this);
 
         // setting collisions between the player and the coin group
@@ -241,8 +238,11 @@ class playGame extends Phaser.Scene {
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
-            console.log(health)
-            health--;
+            if(this.dropping){
+                this.enemy
+            }else{
+                health--;
+            }
             //move enemy that was hit (enemy) to the updated location
             if (health <= 0) {
                 this.dying = true;
@@ -279,6 +279,7 @@ class playGame extends Phaser.Scene {
     quickDrop() {
         if (!(this.player.body.touching.down) && !(this.dying)) {
             this.player.setVelocityY(1000);
+            this.dropping = true;
         }
     }
 
@@ -366,7 +367,6 @@ class playGame extends Phaser.Scene {
             this.playerJumps++;
             jumpSound.play();
             // stops animation
-            this.player.anims.stop();
         }
     }
 
