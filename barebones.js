@@ -34,6 +34,7 @@ let gameOptions = {
     jumps: 2,
 
     // % of probability a coin appears on the platform
+    //set 35
     coinPercent: 100,
 
     // % of probability a enemy appears on the platform
@@ -49,7 +50,7 @@ window.onload = function () {
         width: 900,
         height: 675,
 
-        scene: [preloadGame, PlayGame],
+        scene: [preloadGame, playGame],
         // physics settings
         physics: {
             default: "arcade",
@@ -139,7 +140,7 @@ class PlayGame extends Phaser.Scene {
         sfx.play();
         health = 3;
         this.gui = this.add.text(16, 16, '', { fontSize: '32px', fill: '#999' });
-        this.Highscore_Text = this.add.text(16, 40, 'High Score', { fontSize: '32px', fill: '#999' });
+        this.Highscore_Text = this.add.text(16, 45, 'High Score', { fontSize: '32px', fill: '#999' });
         // group with all active platforms.
         this.platformGroup = this.add.group({
 
@@ -354,7 +355,7 @@ class PlayGame extends Phaser.Scene {
                 if (this.coinPool.getLength()) {
                     let coin = this.coinPool.getFirst();
                     coin.setScale(.3);
-                    coin.x = posX;
+                    coin.x = posX - 100;
                     coin.y = posY - 96;
                     coin.alpha = 1;
                     coin.active = true;
@@ -362,7 +363,7 @@ class PlayGame extends Phaser.Scene {
                     this.coinPool.remove(coin);
                 }
                 else {
-                    let coin = this.physics.add.sprite(posX, posY - 96, "coin");
+                    let coin = this.physics.add.sprite(posX - 100, posY - 96, "coin");
                     coin.setScale(.3);
                     coin.setOffset(650, 22);
                     coin.setSize(95, 95, false);
