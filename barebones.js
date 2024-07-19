@@ -48,7 +48,7 @@ window.onload = function () {
         type: Phaser.AUTO,
         width: 800,
         height: 600,
-        scene: [preloadGame, playGame],
+        scene: [preloadGame, PlayGame],
         backgroundColor: 0x000000,
 
         // physics settings
@@ -116,15 +116,20 @@ var jumpSound;
 var deathSound;
 var gameOver;
 var pickupCoin;
+var score;
+var coinGroup = [];
 // playGame scene
-class playGame extends Phaser.Scene {
-    score = 0;
+class PlayGame extends Phaser.Scene {
+    
     gui;
 
     constructor() {
         super("PlayGame");
     }
     create() {
+        this.score = 0;
+        console.log("start score " + this.score)
+    
         gameOver = false;
         sfx = sfx || this.sound.add('powerMove');
         jumpSound = this.sound.add('jump');
@@ -132,7 +137,7 @@ class playGame extends Phaser.Scene {
         pickupCoin = this.sound.add('pickupCoin');
         sfx.play();
         health = 3;
-        this.gui = this.add.text(16, 16, '', { fontSize: '32px', fill: '#000' });
+        this.gui = this.add.text(16, 16, '', { fontSize: '32px', fill: '#999' });
         // group with all active platforms.
         this.platformGroup = this.add.group({
 
@@ -166,6 +171,8 @@ class playGame extends Phaser.Scene {
             // once a coin is removed from the pool, it's added to the active coins group
             removeCallback: function (coin) {
                 coin.scene.coinGroup.add(coin);
+                coinGroup.push(coin)
+                console.log("In the active coins " + coinGroup[0])
             }
         });
 
@@ -233,7 +240,9 @@ class playGame extends Phaser.Scene {
 
         // setting collisions between the player and the coin group
         this.physics.add.overlap(this.player, this.coinGroup, function (player, coin) {
-
+            
+            this.score += 5;
+            
             this.tweens.add({
                 targets: coin,
                 y: coin.y - 100,
@@ -243,10 +252,14 @@ class playGame extends Phaser.Scene {
                 callbackScope: this,
                 onComplete: function () {
                     pickupCoin.play();
+                    console.log("score " + this.score); 
+                    console.log(this.coinGroup[0])
                     this.coinGroup.killAndHide(coin);
-                    this.coinGroup.remove(coin);
+                    this.coinGroup.remove(coin, true, true);
                 }
             });
+
+            coin.disableBody(false, false);
 
         }, null, this);
 
@@ -338,6 +351,8 @@ class playGame extends Phaser.Scene {
                     coin.anims.play("rotate");
                     coin.setDepth(2);
                     this.coinGroup.add(coin);
+                    //this.coinGroup.push(coin)
+                    console.log("adding coin " + coinGroup[0])
                 }
             }
 
@@ -400,6 +415,32 @@ class playGame extends Phaser.Scene {
         }
         this.player.x = gameOptions.playerStartPosition;
 
+                // // setting collisions between the player and the coin group
+                // this.physics.add.overlap(this.player, this.coinGroup, function (player, coin) {
+
+                //     this.tweens.add({
+                //         targets: coin,
+                //         y: coin.y - 100,
+                //         alpha: 0,
+                //         duration: 800,
+                //         ease: "Cubic.easeOut",
+                //         callbackScope: this,
+                //         onComplete: function (player, coin) {
+                //             pickupCoin.play();
+                //             // coin.disableBody(true, true);
+                //             console.log("score " + this.score); 
+                //             console.log(this.coinGroup[0])
+                //             this.coinGroup.killAndHide(coin);
+                //             this.coinGroup.remove(coin);
+                //             this.score += 5;
+
+                //         }
+                //     });
+        
+                // }, null, this);
+
+        
+      
         // recycling platforms
         let minDistance = game.config.width;
         let rightmostPlatformHeight = 0;
