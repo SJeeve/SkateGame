@@ -268,9 +268,9 @@ class PlayGame extends Phaser.Scene {
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
-            console.log(this.dropping);
             if(this.dropping)
             {
+                this.score += 7;
                 enemy.x = enemy.x + 100;
                 this.enemyGroup.killAndHide(enemy);
                 this.enemyGroup.remove(enemy);
