@@ -93,9 +93,9 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-        this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
-        this.load.image("lights", "/Assets/lights.png");
-        this.load.image("enemy", "/Assets/redshirt.png");
+        this.load.atlas("player", "Assets/katie.png", "Assets/katie.json")
+        this.load.image("lights", "Assets/lights.png");
+        this.load.image("enemy", "Assets/redshirt.png");
     }
     create() {
         this.scene.start("PlayGame");
@@ -110,11 +110,12 @@ var gameOver;
 var pickupCoin;
 var score;
 var coinGroup = [];
+var dropping;
 // playGame scene
 class PlayGame extends Phaser.Scene {
     
     gui;
-
+    dropping = false;
     constructor() {
         super("PlayGame");
     }
@@ -122,6 +123,7 @@ class PlayGame extends Phaser.Scene {
         this.score = 0;
         console.log("start score " + this.score)
     
+        dropping = false;
         gameOver = false;
         sfx = sfx || this.sound.add('powerMove');
         jumpSound = this.sound.add('jump');
@@ -223,9 +225,11 @@ class PlayGame extends Phaser.Scene {
         this.platformCollider = this.physics.add.collider(this.player, this.platformGroup, function () {
 
             // play "run" animation if the player is on a platform
-            if (!this.player.anims.isPlaying) {
+            if(!this.player.anims.isPlaying)
+            {
                 this.player.anims.play("run");
             }
+            this.dropping = false;
         }, null, this);
 
         // setting collisions between the player and the coin group
@@ -255,9 +259,14 @@ class PlayGame extends Phaser.Scene {
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
-            console.log(health)
-            health--;
-
+            console.log(this.dropping);
+            if(this.dropping)
+            {
+                enemy.x = enemy.x + 100;
+                this.enemyGroup.killAndHide(enemy);
+                this.enemyGroup.remove(enemy);
+                
+            } else {health--;}   
             //move enemy that was hit (enemy) to the updated location
             if (health <= 0) {
                 sfx.stop();
@@ -294,6 +303,8 @@ class PlayGame extends Phaser.Scene {
     quickDrop() {
         if (!(this.player.body.touching.down) && !(this.dying)) {
             this.player.setVelocityY(1000);
+            this.dropping = true;
+            console.log()
         }
     }
 
@@ -340,7 +351,6 @@ class PlayGame extends Phaser.Scene {
                     let coin = this.physics.add.sprite(posX, posY - 96, "coin");
                     coin.setImmovable(true);
                     coin.setVelocityX(platform.body.velocity.x);
-                    coin.anims.play("rotate");
                     coin.setDepth(2);
                     this.coinGroup.add(coin);
                     //this.coinGroup.push(coin)
@@ -349,19 +359,19 @@ class PlayGame extends Phaser.Scene {
             }
 
             // is there a enemy over the platform?
-            if ((Phaser.Math.Between(1, 100) <= gameOptions.enemyPercent) && (platformWidth > 170)) {
+            if ((Phaser.Math.Between(1, 100) <= gameOptions.enemyPercent) && (platformWidth > 150)) {
                 if (this.enemyPool.getLength()) {
                     let enemy = this.enemyPool.getFirst();
                     enemy.setScale(.13)
                     enemy.x = posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth);
-                    enemy.y = posY - 46;
+                    enemy.y = posY - 75;
                     enemy.alpha = 1;
                     enemy.active = true;
                     enemy.visible = true;
                     this.enemyPool.remove(enemy);
                 }
                 else {
-                    let enemy = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 46, "enemy");
+                    let enemy = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 75, "enemy");
                     enemy.setScale(.13)
                     enemy.setImmovable(true);
                     enemy.setVelocityX(platform.body.velocity.x);
@@ -373,8 +383,7 @@ class PlayGame extends Phaser.Scene {
         }
     }
 
-    // the player jumps when on the ground, or once in the air as long as there are jumps left and the first jump was on the ground
-    // and obviously if the player is not dying
+
     jump() {
         if ((!this.dying) && (this.player.body.touching.down || (this.playerJumps > 0 && this.playerJumps < gameOptions.jumps))) {
             if (this.player.body.touching.down) {
@@ -405,33 +414,6 @@ class PlayGame extends Phaser.Scene {
             }
         }
         this.player.x = gameOptions.playerStartPosition;
-
-                // // setting collisions between the player and the coin group
-                // this.physics.add.overlap(this.player, this.coinGroup, function (player, coin) {
-
-                //     this.tweens.add({
-                //         targets: coin,
-                //         y: coin.y - 100,
-                //         alpha: 0,
-                //         duration: 800,
-                //         ease: "Cubic.easeOut",
-                //         callbackScope: this,
-                //         onComplete: function (player, coin) {
-                //             pickupCoin.play();
-                //             // coin.disableBody(true, true);
-                //             console.log("score " + this.score); 
-                //             console.log(this.coinGroup[0])
-                //             this.coinGroup.killAndHide(coin);
-                //             this.coinGroup.remove(coin);
-                //             this.score += 5;
-
-                //         }
-                //     });
-        
-                // }, null, this);
-
-        
-      
         // recycling platforms
         let minDistance = game.config.width;
         let rightmostPlatformHeight = 0;
