@@ -101,11 +101,6 @@ class preloadGame extends Phaser.Scene {
 
     }
     create() {
-
-        // setting player animation
-
-
-
         this.scene.start("PlayGame");
     }
 }
@@ -254,15 +249,11 @@ class playGame extends Phaser.Scene {
             
             health--;
             //move enemy that was hit (enemy) to the updated location
-                if(health <= 0)
-                {
                     sfx.stop();
                     this.player.anims.stop();
                     this.player.setFrame(2);
                     this.player.body.setVelocityY(-200);
                     this.physics.world.removeCollider(this.platformCollider);
-    
-                };
             
 
         }, null, this);
