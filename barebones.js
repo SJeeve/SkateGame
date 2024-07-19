@@ -95,6 +95,7 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
         this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
         this.load.image("lights", "/Assets/lights.png");
+        this.load.image("enemy", "/Assets/redshirt.png");
     }
     create() {
         this.scene.start("PlayGame");
@@ -204,13 +205,8 @@ class playGame extends Phaser.Scene {
         this.player.setDepth(2);
         this.anims.create({ key: 'katie_skating', frames: this.anims.generateFrameNames('player', { prefix: 'katierolling', start: 1, end: 5, zeroPad: 3 }), repeat: -1, frameRate: 7 });
         this.player.play('katie_skating')
-<<<<<<< HEAD
         this.player.setScale(.17);
-        this.player.setSize(500, 900, false);
-=======
-        this.player.setScale(.15)
-        this.player.body.width = 100
->>>>>>> 559445e6f478a9e15a2cb9079bd89457a056e9a8
+        this.player.setSize(500, 925, false);
 
 
         // the player is not dying
@@ -339,10 +335,7 @@ class playGame extends Phaser.Scene {
             if ((Phaser.Math.Between(1, 100) <= gameOptions.enemyPercent) && (platformWidth > 170)) {
                 if (this.enemyPool.getLength()) {
                     let enemy = this.enemyPool.getFirst();
-<<<<<<< HEAD
                     enemy.setScale(.13)
-=======
->>>>>>> 559445e6f478a9e15a2cb9079bd89457a056e9a8
                     enemy.x = posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth);
                     enemy.y = posY - 46;
                     enemy.alpha = 1;
@@ -352,10 +345,7 @@ class playGame extends Phaser.Scene {
                 }
                 else {
                     let enemy = this.physics.add.sprite(posX - platformWidth / 2 + Phaser.Math.Between(1, platformWidth), posY - 46, "enemy");
-<<<<<<< HEAD
                     enemy.setScale(.13)
-=======
->>>>>>> 559445e6f478a9e15a2cb9079bd89457a056e9a8
                     enemy.setImmovable(true);
                     enemy.setVelocityX(platform.body.velocity.x);
                     enemy.setSize(8, 2, true);
