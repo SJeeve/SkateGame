@@ -93,8 +93,9 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-        this.load.atlas("player", "Assets/katie.png", "Assets/katie.json")
-        this.load.image("lights", "Assets/lights.png");
+        this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
+        this.load.image("lights", "/Assets/lights.png");
+        this.load.image("enemy", "/Assets/redshirt.png");
     }
     create() {
         this.scene.start("PlayGame");
@@ -205,16 +206,19 @@ class playGame extends Phaser.Scene {
         this.anims.create({ key: 'katie_skating', frames: this.anims.generateFrameNames('player', { prefix: 'katierolling', start: 1, end: 5, zeroPad: 3 }), repeat: -1, frameRate: 7 });
         this.player.play('katie_skating')
         this.player.setScale(.17);
-        this.player.setSize(500, 900, false);
+        this.player.setSize(500, 925, false);
 
 
         // the player is not dying
         this.dying = false;
-        this.dropping = false;
+
         // setting collisions between the player and the platform group
         this.platformCollider = this.physics.add.collider(this.player, this.platformGroup, function () {
 
-
+            // play "run" animation if the player is on a platform
+            if (!this.player.anims.isPlaying) {
+                this.player.anims.play("run");
+            }
         }, null, this);
 
         // setting collisions between the player and the coin group
@@ -238,10 +242,10 @@ class playGame extends Phaser.Scene {
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
-                health--;
+            console.log(health)
+            health--;
             //move enemy that was hit (enemy) to the updated location
             if (health <= 0) {
-                this.dying = true;
                 sfx.stop();
                 this.player.anims.stop();
                 this.player.setFrame(2);
@@ -273,9 +277,8 @@ class playGame extends Phaser.Scene {
     }
 
     quickDrop() {
-        if (!(this.player.body.touching.down) && !(this.dying)) {
+        if (!(this.player.body.touching.down)) {
             this.player.setVelocityY(1000);
-            this.dropping = true;
         }
     }
 
@@ -322,6 +325,7 @@ class playGame extends Phaser.Scene {
                     let coin = this.physics.add.sprite(posX, posY - 96, "coin");
                     coin.setImmovable(true);
                     coin.setVelocityX(platform.body.velocity.x);
+                    coin.anims.play("rotate");
                     coin.setDepth(2);
                     this.coinGroup.add(coin);
                 }
@@ -363,6 +367,7 @@ class playGame extends Phaser.Scene {
             this.playerJumps++;
             jumpSound.play();
             // stops animation
+            this.player.anims.stop();
         }
     }
 
