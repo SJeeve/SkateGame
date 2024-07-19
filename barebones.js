@@ -244,9 +244,11 @@ class playGame extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
             console.log(health)
             health--;
+
             //move enemy that was hit (enemy) to the updated location
             if (health <= 0) {
                 sfx.stop();
+                this.dying = true;
                 this.player.anims.stop();
                 this.player.setFrame(2);
                 this.player.body.setVelocityY(-200);
@@ -277,7 +279,7 @@ class playGame extends Phaser.Scene {
     }
 
     quickDrop() {
-        if (!(this.player.body.touching.down)) {
+        if (!(this.player.body.touching.down) && !(this.dying)) {
             this.player.setVelocityY(1000);
         }
     }
