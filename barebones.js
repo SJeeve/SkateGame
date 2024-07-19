@@ -48,9 +48,8 @@ window.onload = function () {
         type: Phaser.AUTO,
         width: 900,
         height: 675,
-        scene: [preloadGame, PlayGame],
-        backgroundColor: 0x000000,
 
+        scene: [preloadGame, playGame],
         // physics settings
         physics: {
             default: "arcade",
@@ -93,9 +92,10 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('jump', 'SFX/jump.wav');
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
-        this.load.atlas("player", "Assets/katie.png", "Assets/katie.json")
-        this.load.image("lights", "Assets/lights.png");
-        this.load.image("enemy", "Assets/redshirt.png");
+        this.load.atlas("player", "/Assets/katie.png", "/Assets/katie.json")
+        this.load.image("lights", "/Assets/lights.png");
+        this.load.image("enemy", "/Assets/redshirt.png");
+        this.load.image('background', '/Assets/background.png');
     }
     create() {
         this.scene.start("PlayGame");
@@ -120,9 +120,10 @@ class PlayGame extends Phaser.Scene {
         super("PlayGame");
     }
     create() {
+        var bg = this.add.image(game.scale.width/2, game.scale.height/2, 'background');
+        bg.setScale(2)
         this.score = 0;
         console.log("start score " + this.score)
-    
         dropping = false;
         gameOver = false;
         sfx = sfx || this.sound.add('powerMove');
