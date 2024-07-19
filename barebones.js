@@ -115,7 +115,7 @@ var sfx;
 var jumpSound;
 var deathSound;
 var gameOver;
-var getCoin;
+var pickupCoin;
 // playGame scene
 class playGame extends Phaser.Scene {
     score = 0;
@@ -129,7 +129,7 @@ class playGame extends Phaser.Scene {
         sfx = sfx || this.sound.add('powerMove');
         jumpSound = this.sound.add('jump');
         deathSound = this.sound.add('gameOver');
-        getCoin = this.sound.add('pickupCoin');
+        pickupCoin = this.sound.add('pickupCoin');
         sfx.play();
         health = 3;
     create();{
