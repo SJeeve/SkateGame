@@ -34,7 +34,7 @@ let gameOptions = {
     jumps: 2,
 
     // % of probability a coin appears on the platform
-    coinPercent: 100,
+    coinPercent: 35,
 
     // % of probability a enemy appears on the platform
     enemyPercent: 60
@@ -94,7 +94,7 @@ class preloadGame extends Phaser.Scene {
         this.load.audio('gameOver', 'SFX/gameOver.wav');
         this.load.audio('pickupCoin', 'SFX/pickupCoin.wav');
         this.load.atlas("player", "Assets/katie.png", "/Assets/katie.json")
-        this.load.image("lights", "Assets/Lights.png");
+        this.load.image("lights", "Assets/Light.png");
         this.load.image("enemy", "Assets/redshirt.png");
         this.load.image('background', 'Assets/background.png');
         this.load.image('coin', 'Assets/Star.png');
@@ -267,9 +267,9 @@ class PlayGame extends Phaser.Scene {
 
         // setting collisions between the player and the enemy group
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
-            console.log(this.dropping);
             if(this.dropping)
             {
+                this.score += 7;
                 enemy.x = enemy.x + 100;
                 this.enemyGroup.killAndHide(enemy);
                 this.enemyGroup.remove(enemy);
