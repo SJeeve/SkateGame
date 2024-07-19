@@ -34,8 +34,7 @@ let gameOptions = {
     jumps: 2,
 
     // % of probability a coin appears on the platform
-    //set 35
-    coinPercent: 100,
+    coinPercent: 35,
 
     // % of probability a enemy appears on the platform
     enemyPercent: 60
@@ -99,6 +98,7 @@ class preloadGame extends Phaser.Scene {
         this.load.image("enemy", "Assets/redshirt.png");
         this.load.image('background', 'Assets/background.png');
         this.load.image('coin', 'Assets/Star.png');
+        this.load.audio('stompKids', 'SFX/stompKids.wav');
     }
     create() {
         this.scene.start("PlayGame");
@@ -114,7 +114,8 @@ var pickupCoin;
 var score;
 var coinGroup = [];
 var dropping;
-var Highscore_Text
+var Highscore_Text;
+var stompingKids;
 // playGame scene
 class PlayGame extends Phaser.Scene {
     
@@ -137,6 +138,7 @@ class PlayGame extends Phaser.Scene {
         jumpSound = this.sound.add('jump');
         deathSound = this.sound.add('gameOver');
         pickupCoin = this.sound.add('pickupCoin');
+        stompingKids = this.sound.add('stompKids');
         sfx.play();
         health = 3;
         this.gui = this.add.text(16, 16, '', { fontSize: '32px', fill: '#999' });
@@ -270,6 +272,7 @@ class PlayGame extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.enemyGroup, function (player, enemy) {
             if(this.dropping)
             {
+                stompingKids.play();
                 this.score += 7;
                 enemy.x = enemy.x + 100;
                 this.enemyGroup.killAndHide(enemy);
